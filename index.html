@@ -22,7 +22,10 @@ section h4{margin:16px 0 5px;font-size:12px;color:#5a5a72;font-weight:700;
    them all agree -- the name column is wide enough for the longest in the league,
    and the numbers line up straight down the page. */
 table{border-collapse:collapse;width:100%;table-layout:fixed}
-col.c-rk{width:30px}
+/* Wide enough for three digits. A team table carries LEAGUE positions, so it
+   reaches 226 -- and at 30px those truncated to "1..." and "2...", which is worse
+   than no number at all. */
+col.c-rk{width:38px}
 col.c-fl{width:26px}
 col.c-pl{width:auto}
 col.c-tm{width:52px}
@@ -41,7 +44,8 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#6a6a80;
   text-align:right;border-bottom:1px solid #d8d9e3}
 th.l,td.l{text-align:left}
 td{text-align:right;font-variant-numeric:tabular-nums}
-td.rk{color:#9a9ab0;font-size:12px;width:1%}
+/* Never clipped: a rank that reads "1..." could be 1, 14 or 226. */
+td.rk{color:#9a9ab0;font-size:12px;overflow:visible;text-overflow:clip}
 td.fl{width:1%;padding-right:0}
 td.fl img{display:block;width:19px;height:auto;border-radius:2px}
 td.pl{font-weight:600}
@@ -58,7 +62,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
    width as possible before it has to wrap at all. */
 @media(max-width:560px){
   th,td{padding:5px 2px;font-size:13px}
-  col.c-rk{width:22px}
+  col.c-rk{width:32px}
   col.c-fl{width:22px}
   col.c-tm{width:38px}
   col.c-rat{width:48px}
