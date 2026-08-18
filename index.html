@@ -15,8 +15,22 @@ section > h3{margin:0 0 8px;font-size:15px;letter-spacing:-.1px;color:#1a1a2e;
   font-weight:700;padding-bottom:4px;border-bottom:2px solid #ecedf3}
 section h4{margin:16px 0 5px;font-size:12px;color:#5a5a72;font-weight:700;
   text-transform:uppercase;letter-spacing:.4px}
-table{border-collapse:collapse;width:100%}
-th,td{padding:5px 6px;border-bottom:1px solid #ecedf3;white-space:nowrap}
+/* EVERY TABLE THE SAME SHAPE.
+   With auto layout each table sizes itself to its own contents, so the Rookies
+   table put Player in a different place from the Top 30 and the eye had to find
+   the columns again at every heading. Fixed layout plus one set of widths makes
+   them all agree -- the name column is wide enough for the longest in the league,
+   and the numbers line up straight down the page. */
+table{border-collapse:collapse;width:100%;table-layout:fixed}
+col.c-rk{width:30px}
+col.c-fl{width:26px}
+col.c-pl{width:auto}
+col.c-tm{width:52px}
+col.c-rat{width:60px}
+col.c-gp{width:42px}
+col.c-num{width:52px}
+th,td{padding:5px 6px;border-bottom:1px solid #ecedf3;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
 th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#6a6a80;
   text-align:right;border-bottom:1px solid #d8d9e3}
 th.l,td.l{text-align:left}
@@ -39,10 +53,16 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 .showall{font:inherit;font-size:11px;padding:3px 9px;cursor:pointer;
   border:1px solid #d8d9e3;background:#fff;border-radius:11px;color:#3a3a52}
 .showall:hover{background:#f4f4fa}
-@media(max-width:420px){th,td{padding:4px 4px}}
+@media(max-width:560px){
+  th,td{padding:4px 3px;font-size:13px}
+  col.c-tm{width:42px}
+  col.c-rat{width:52px}
+  col.c-gp{width:34px}
+  col.c-num{width:42px}
+}
 </style></head><body><div class="wrap">
 <h2>WNBA &mdash; Global Rating</h2>
-<section id="all"><h3>Top 30</h3><table><thead><tr>
+<section id="all"><h3>Top 30</h3><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -273,7 +293,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr class="more"><td class="rk">224</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maddy Westbeld</td><td class="l tm">CHI</td><td class="rat">-0.02</td><td>3</td><td>1.0</td><td>1.3</td><td>0.7</td></tr>
 <tr class="more"><td class="rk">225</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Miela Sowah</td><td class="l tm">GSV</td><td class="rat">-0.08</td><td>2</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
 <tr class="more"><td class="rk">226</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rayah Marshall</td><td class="l tm">CON</td><td class="rat">-0.13</td><td>2</td><td>0.5</td><td>1.0</td><td>0.0</td></tr></tbody></table><p class="foot"><button class="showall" type="button" hidden>Show all 226</button></p></section>
-<section id="rookies"><h3>Rookies</h3><table><thead><tr>
+<section id="rookies"><h3>Rookies</h3><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -293,7 +313,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/nz.png" alt="" loading="lazy"></td><td class="l pl">Charlisse Leger-Walker</td><td class="l tm">CON</td><td class="rat">4.50</td><td>33</td><td>6.8</td><td>2.1</td><td>3.3</td></tr>
 <tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/mx.png" alt="" loading="lazy"></td><td class="l pl">Gabriela Jaquez</td><td class="l tm">CHI</td><td class="rat">4.48</td><td>31</td><td>6.8</td><td>3.1</td><td>0.9</td></tr>
 <tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/ke.png" alt="" loading="lazy"></td><td class="l pl">Madina Okot</td><td class="l tm">ATL</td><td class="rat">4.05</td><td>33</td><td>5.6</td><td>3.6</td><td>0.2</td></tr></tbody></table></section>
-<section id="intl"><h3>International</h3><table><thead><tr>
+<section id="intl"><h3>International</h3><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -313,7 +333,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Marine Johannes</td><td class="l tm">NYL</td><td class="rat">8.00</td><td>33</td><td>9.3</td><td>2.2</td><td>2.5</td></tr>
 <tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Nyara Sabally</td><td class="l tm">TOR</td><td class="rat">7.67</td><td>24</td><td>12.3</td><td>5.2</td><td>1.7</td></tr>
 <tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Jade Melbourne</td><td class="l tm">SEA</td><td class="rat">7.43</td><td>36</td><td>9.3</td><td>2.0</td><td>3.9</td></tr></tbody></table></section>
-<section id="bench"><h3>Sixth Player</h3><table><thead><tr>
+<section id="bench"><h3>Sixth Player</h3><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -333,7 +353,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rebekah Gardner</td><td class="l tm">NYL</td><td class="rat">5.49</td><td>34</td><td>5.2</td><td>2.6</td><td>1.3</td></tr>
 <tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cotie McMahon</td><td class="l tm">WAS</td><td class="rat">5.48</td><td>32</td><td>6.8</td><td>3.2</td><td>2.0</td></tr>
 <tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cameron Brink</td><td class="l tm">LAS</td><td class="rat">5.31</td><td>25</td><td>9.1</td><td>4.9</td><td>1.3</td></tr></tbody></table></section>
-<section id="teams"><h3>By Team</h3><h4>Atlanta Dream</h4><table data-rank="keep"><thead><tr>
+<section id="teams"><h3>By Team</h3><h4>Atlanta Dream</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -353,7 +373,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">189</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aaliyah Nye</td><td class="l tm">ATL</td><td class="rat">0.37</td><td>16</td><td>0.7</td><td>0.2</td><td>0.2</td></tr>
 <tr><td class="rk">199</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Shatori Walker-Kimbrough</td><td class="l tm">ATL</td><td class="rat">0.20</td><td>9</td><td>0.9</td><td>0.2</td><td>0.2</td></tr>
 <tr><td class="rk">223</td><td class="fl"><img src="https://flagcdn.com/w40/ng.png" alt="" loading="lazy"></td><td class="l pl">Amy Okonkwo</td><td class="l tm">ATL</td><td class="rat">-0.01</td><td>1</td><td>1.0</td><td>1.0</td><td>0.0</td></tr></tbody></table>
-<h4>Chicago Sky</h4><table data-rank="keep"><thead><tr>
+<h4>Chicago Sky</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -374,7 +394,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">180</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Chloe Bibby</td><td class="l tm">CHI</td><td class="rat">0.57</td><td>4</td><td>5.5</td><td>0.5</td><td>1.5</td></tr>
 <tr><td class="rk">214</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Saylor Poffenbarger</td><td class="l tm">CHI</td><td class="rat">0.04</td><td>5</td><td>0.0</td><td>1.2</td><td>0.2</td></tr>
 <tr><td class="rk">224</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maddy Westbeld</td><td class="l tm">CHI</td><td class="rat">-0.02</td><td>3</td><td>1.0</td><td>1.3</td><td>0.7</td></tr></tbody></table>
-<h4>Connecticut Sun</h4><table data-rank="keep"><thead><tr>
+<h4>Connecticut Sun</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -393,7 +413,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">157</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Gianna Kneepkens</td><td class="l tm">CON</td><td class="rat">1.43</td><td>25</td><td>3.2</td><td>1.1</td><td>0.4</td></tr>
 <tr><td class="rk">190</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ashlon Jackson</td><td class="l tm">CON</td><td class="rat">0.33</td><td>8</td><td>1.2</td><td>0.8</td><td>0.8</td></tr>
 <tr><td class="rk">226</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rayah Marshall</td><td class="l tm">CON</td><td class="rat">-0.13</td><td>2</td><td>0.5</td><td>1.0</td><td>0.0</td></tr></tbody></table>
-<h4>Dallas Wings</h4><table data-rank="keep"><thead><tr>
+<h4>Dallas Wings</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -413,7 +433,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">181</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Haley Jones</td><td class="l tm">DAL</td><td class="rat">0.56</td><td>7</td><td>4.0</td><td>1.7</td><td>0.7</td></tr>
 <tr><td class="rk">204</td><td class="fl"><img src="https://flagcdn.com/w40/it.png" alt="" loading="lazy"></td><td class="l pl">Costanza Verona</td><td class="l tm">DAL</td><td class="rat">0.12</td><td>1</td><td>4.0</td><td>0.0</td><td>2.0</td></tr>
 <tr><td class="rk">207</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">JJ Quinerly</td><td class="l tm">DAL</td><td class="rat">0.09</td><td>2</td><td>1.0</td><td>0.5</td><td>1.0</td></tr></tbody></table>
-<h4>Golden State Valkyries</h4><table data-rank="keep"><thead><tr>
+<h4>Golden State Valkyries</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -433,7 +453,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">200</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ashten Prechtel</td><td class="l tm">GSV</td><td class="rat">0.20</td><td>2</td><td>4.0</td><td>2.0</td><td>1.0</td></tr>
 <tr><td class="rk">215</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ndjakalenga Mwenentanda</td><td class="l tm">GSV</td><td class="rat">0.03</td><td>4</td><td>0.0</td><td>0.5</td><td>0.5</td></tr>
 <tr><td class="rk">225</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Miela Sowah</td><td class="l tm">GSV</td><td class="rat">-0.08</td><td>2</td><td>0.0</td><td>0.0</td><td>0.0</td></tr></tbody></table>
-<h4>Indiana Fever</h4><table data-rank="keep"><thead><tr>
+<h4>Indiana Fever</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -452,7 +472,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">185</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Damiris Dantas</td><td class="l tm">IND</td><td class="rat">0.44</td><td>12</td><td>3.3</td><td>1.5</td><td>0.3</td></tr>
 <tr><td class="rk">206</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Bree Hall</td><td class="l tm">IND</td><td class="rat">0.10</td><td>2</td><td>2.5</td><td>0.5</td><td>0.0</td></tr>
 <tr><td class="rk">217</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Mercedes Russell</td><td class="l tm">IND</td><td class="rat">0.02</td><td>2</td><td>1.0</td><td>0.0</td><td>0.0</td></tr></tbody></table>
-<h4>Los Angeles Sparks</h4><table data-rank="keep"><thead><tr>
+<h4>Los Angeles Sparks</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -473,7 +493,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">197</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Tonie Morgan</td><td class="l tm">LAS</td><td class="rat">0.21</td><td>2</td><td>5.0</td><td>0.5</td><td>3.5</td></tr>
 <tr><td class="rk">202</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Alissa Pili</td><td class="l tm">LAS</td><td class="rat">0.19</td><td>4</td><td>2.5</td><td>1.8</td><td>0.5</td></tr>
 <tr><td class="rk">222</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sania Feagin</td><td class="l tm">LAS</td><td class="rat">-0.00</td><td>3</td><td>0.0</td><td>0.3</td><td>0.7</td></tr></tbody></table>
-<h4>Las Vegas Aces</h4><table data-rank="keep"><thead><tr>
+<h4>Las Vegas Aces</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -492,7 +512,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">171</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ta'Niya Latson</td><td class="l tm">LVA</td><td class="rat">0.88</td><td>15</td><td>3.1</td><td>1.0</td><td>0.5</td></tr>
 <tr><td class="rk">175</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Justine Pissott</td><td class="l tm">LVA</td><td class="rat">0.75</td><td>6</td><td>6.3</td><td>1.3</td><td>0.5</td></tr>
 <tr><td class="rk">193</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Dana Evans</td><td class="l tm">LVA</td><td class="rat">0.28</td><td>10</td><td>3.4</td><td>1.8</td><td>2.0</td></tr></tbody></table>
-<h4>Minnesota Lynx</h4><table data-rank="keep"><thead><tr>
+<h4>Minnesota Lynx</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -512,7 +532,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">184</td><td class="fl"><img src="https://flagcdn.com/w40/cz.png" alt="" loading="lazy"></td><td class="l pl">Emma Cechova</td><td class="l tm">MIN</td><td class="rat">0.49</td><td>3</td><td>8.3</td><td>3.7</td><td>0.0</td></tr>
 <tr><td class="rk">195</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Teaira McCowan</td><td class="l tm">MIN</td><td class="rat">0.26</td><td>10</td><td>1.4</td><td>2.4</td><td>0.3</td></tr>
 <tr><td class="rk">218</td><td class="fl"><img src="https://flagcdn.com/w40/nl.png" alt="" loading="lazy"></td><td class="l pl">Emese Hof</td><td class="l tm">MIN</td><td class="rat">0.02</td><td>3</td><td>2.3</td><td>1.7</td><td>0.7</td></tr></tbody></table>
-<h4>New York Liberty</h4><table data-rank="keep"><thead><tr>
+<h4>New York Liberty</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -533,7 +553,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">205</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Anneli Maley</td><td class="l tm">NYL</td><td class="rat">0.11</td><td>7</td><td>0.9</td><td>1.4</td><td>0.3</td></tr>
 <tr><td class="rk">208</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Alexandra Fowler</td><td class="l tm">NYL</td><td class="rat">0.08</td><td>2</td><td>6.0</td><td>0.0</td><td>0.5</td></tr>
 <tr><td class="rk">216</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aubrey Griffin</td><td class="l tm">NYL</td><td class="rat">0.02</td><td>4</td><td>0.5</td><td>0.2</td><td>0.0</td></tr></tbody></table>
-<h4>Phoenix Mercury</h4><table data-rank="keep"><thead><tr>
+<h4>Phoenix Mercury</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -553,7 +573,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">194</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sha Carter</td><td class="l tm">PHX</td><td class="rat">0.27</td><td>13</td><td>1.2</td><td>0.7</td><td>0.5</td></tr>
 <tr><td class="rk">209</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Shay Ciezki</td><td class="l tm">PHX</td><td class="rat">0.07</td><td>2</td><td>1.5</td><td>0.5</td><td>0.5</td></tr>
 <tr><td class="rk">212</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Peyton Williams</td><td class="l tm">PHX</td><td class="rat">0.05</td><td>1</td><td>0.0</td><td>0.0</td><td>2.0</td></tr></tbody></table>
-<h4>Portland Fire</h4><table data-rank="keep"><thead><tr>
+<h4>Portland Fire</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -572,7 +592,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">152</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Luisa Geiselsoder</td><td class="l tm">POR</td><td class="rat">1.58</td><td>21</td><td>4.5</td><td>2.6</td><td>1.3</td></tr>
 <tr><td class="rk">159</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jordan Harrison</td><td class="l tm">POR</td><td class="rat">1.25</td><td>8</td><td>5.6</td><td>2.0</td><td>3.6</td></tr>
 <tr><td class="rk">188</td><td class="fl"><img src="https://flagcdn.com/w40/ba.png" alt="" loading="lazy"></td><td class="l pl">Kamiah Smalls</td><td class="l tm">POR</td><td class="rat">0.39</td><td>2</td><td>7.5</td><td>0.0</td><td>3.0</td></tr></tbody></table>
-<h4>Seattle Storm</h4><table data-rank="keep"><thead><tr>
+<h4>Seattle Storm</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -592,7 +612,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">183</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Taylor Thierry</td><td class="l tm">SEA</td><td class="rat">0.53</td><td>11</td><td>1.2</td><td>1.3</td><td>0.3</td></tr>
 <tr><td class="rk">210</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Joyner Holmes</td><td class="l tm">SEA</td><td class="rat">0.07</td><td>1</td><td>2.0</td><td>5.0</td><td>1.0</td></tr>
 <tr><td class="rk">219</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Taina Mair</td><td class="l tm">SEA</td><td class="rat">0.01</td><td>6</td><td>1.2</td><td>0.3</td><td>0.5</td></tr></tbody></table>
-<h4>Toronto Tempo</h4><table data-rank="keep"><thead><tr>
+<h4>Toronto Tempo</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
@@ -614,7 +634,7 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr><td class="rk">201</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Kayla Alexander</td><td class="l tm">TOR</td><td class="rat">0.20</td><td>4</td><td>2.2</td><td>2.8</td><td>0.5</td></tr>
 <tr><td class="rk">213</td><td class="fl"><img src="https://flagcdn.com/w40/gr.png" alt="" loading="lazy"></td><td class="l pl">Mariella Fasoula</td><td class="l tm">TOR</td><td class="rat">0.04</td><td>3</td><td>1.3</td><td>1.0</td><td>0.3</td></tr>
 <tr><td class="rk">220</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Ornella Bankole</td><td class="l tm">TOR</td><td class="rat">0.00</td><td>3</td><td>0.7</td><td>0.7</td><td>0.0</td></tr></tbody></table>
-<h4>Washington Mystics</h4><table data-rank="keep"><thead><tr>
+<h4>Washington Mystics</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
