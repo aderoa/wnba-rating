@@ -9,16 +9,21 @@ body{margin:0;padding:0;background:#fff;
   font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,
   sans-serif;color:#1a1a2e}
 .wrap{max-width:640px;margin:0 auto;padding:2px}
-h2{margin:0 0 10px;font-size:17px;letter-spacing:-.2px}
+h2{margin:0 0 8px;font-size:17px;letter-spacing:-.2px}
+nav{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:4px}
+nav button{font:inherit;font-size:12px;padding:3px 10px;cursor:pointer;
+  border:1px solid #d8d9e3;background:#fff;border-radius:12px;color:#3a3a52}
+nav button:hover{background:#f4f4fa}
+nav button[aria-current="true"]{background:#fdf3e0;border-color:#e0b070;
+  color:#8a5a00;font-weight:600}
+section{display:none}
+section.on{display:block}
+section h3{margin:16px 0 6px;font-size:13px;color:#5a5a72;font-weight:700}
+section h3:first-child{margin-top:0}
 table{border-collapse:collapse;width:100%}
 th,td{padding:5px 6px;border-bottom:1px solid #ecedf3;white-space:nowrap}
 th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#6a6a80;
-  text-align:right;border-bottom:1px solid #d8d9e3;white-space:nowrap}
-/* Every numeric column gets the same width, so Rat through Ast line up as a block
-   rather than each being sized by its own widest value. */
-th:nth-child(n+5),td:nth-child(n+5){width:11%}
-th:nth-child(3),td:nth-child(3){width:auto}
-th:nth-child(4),td:nth-child(4){width:10%}
+  text-align:right;border-bottom:1px solid #d8d9e3}
 th.l,td.l{text-align:left}
 td{text-align:right;font-variant-numeric:tabular-nums}
 td.rk{color:#9a9ab0;font-size:12px;width:1%}
@@ -29,33 +34,30 @@ td.tm{color:#5a5a72;font-size:12px;letter-spacing:.3px}
 td.rat{font-weight:700;color:#8a5a00}
 tr:nth-child(even) td{background:#fafafd}
 tr.more{display:none}
+th[data-s]{cursor:pointer}
 th[data-s]:hover{color:#1a1a2e}
 th[aria-sort]{color:#8a5a00}
 th[aria-sort="descending"]::after{content:" ↓"}
 th[aria-sort="ascending"]::after{content:" ↑"}
-#more{font:inherit;font-size:11px;padding:3px 9px;margin-right:8px;cursor:pointer;
+.none{color:#8a8aa0;font-size:12px;margin:4px 0 0}
+.foot{margin:8px 0 0}
+.showall{font:inherit;font-size:11px;padding:3px 9px;cursor:pointer;
   border:1px solid #d8d9e3;background:#fff;border-radius:11px;color:#3a3a52}
-#more:hover{background:#f4f4fa}
-.foot{margin-top:8px;font-size:11px;color:#8a8aa0}
-@media(max-width:420px){
-  th,td{padding:4px 4px}
-  .hide-s{display:none}
-}
+.showall:hover{background:#f4f4fa}
+@media(max-width:420px){th,td{padding:4px 4px}}
 </style></head><body><div class="wrap">
 <h2>WNBA &mdash; Global Rating</h2>
-<table>
-<thead><tr class="hd">
-<!-- ONE HEADER PER COLUMN, including the two that say nothing.
-     A colspan="2" over the rank and the flag left the header with eight cells
-     against the body's nine, so every column after Player sat one place to the
-     left of its own numbers -- assists under a blank heading. -->
+<nav><button type="button" data-for="all" aria-current="true">Overall</button>
+<button type="button" data-for="rookies">Rookies</button>
+<button type="button" data-for="intl">International</button>
+<button type="button" data-for="bench">Off the bench</button>
+<button type="button" data-for="teams">By team</button></nav>
+<section id="all" class="on"><table><thead><tr>
 <th></th><th></th>
 <th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
 <th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
 <th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead>
-<tbody>
-<tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">A'ja Wilson</td><td class="l tm">LVA</td><td class="rat">29.48</td><td>33</td><td>26.1</td><td>9.6</td><td>3.1</td></tr>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">A'ja Wilson</td><td class="l tm">LVA</td><td class="rat">29.48</td><td>33</td><td>26.1</td><td>9.6</td><td>3.1</td></tr>
 <tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Olivia Miles</td><td class="l tm">MIN</td><td class="rat">21.93</td><td>34</td><td>19.9</td><td>4.6</td><td>6.1</td></tr>
 <tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jackie Young</td><td class="l tm">LVA</td><td class="rat">21.85</td><td>35</td><td>18.4</td><td>4.4</td><td>6.7</td></tr>
 <tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Breanna Stewart</td><td class="l tm">NYL</td><td class="rat">21.82</td><td>35</td><td>20.7</td><td>8.2</td><td>3.2</td></tr>
@@ -280,65 +282,439 @@ th[aria-sort="ascending"]::after{content:" ↑"}
 <tr class="more"><td class="rk">223</td><td class="fl"><img src="https://flagcdn.com/w40/ng.png" alt="" loading="lazy"></td><td class="l pl">Amy Okonkwo</td><td class="l tm">ATL</td><td class="rat">-0.05</td><td>1</td><td>1.0</td><td>1.0</td><td>0.0</td></tr>
 <tr class="more"><td class="rk">224</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maddy Westbeld</td><td class="l tm">CHI</td><td class="rat">-0.10</td><td>3</td><td>1.0</td><td>1.3</td><td>0.7</td></tr>
 <tr class="more"><td class="rk">225</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Miela Sowah</td><td class="l tm">GSV</td><td class="rat">-0.52</td><td>2</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
-<tr class="more"><td class="rk">226</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rayah Marshall</td><td class="l tm">CON</td><td class="rat">-0.88</td><td>2</td><td>0.5</td><td>1.0</td><td>0.0</td></tr>
-</tbody></table>
-<p class="foot"><button id="more" type="button" hidden>Show all 226</button></p>
+<tr class="more"><td class="rk">226</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rayah Marshall</td><td class="l tm">CON</td><td class="rat">-0.88</td><td>2</td><td>0.5</td><td>1.0</td><td>0.0</td></tr></tbody></table><p class="foot"><button class="showall" type="button" hidden>Show all 226</button></p></section>
+<section id="rookies" class=""><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Olivia Miles</td><td class="l tm">MIN</td><td class="rat">21.93</td><td>34</td><td>19.9</td><td>4.6</td><td>6.1</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Pauline Astier</td><td class="l tm">NYL</td><td class="rat">10.50</td><td>36</td><td>9.4</td><td>2.4</td><td>3.5</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Flau'jae Johnson</td><td class="l tm">SEA</td><td class="rat">9.79</td><td>35</td><td>13.5</td><td>4.9</td><td>3.0</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sydney Taylor</td><td class="l tm">CHI</td><td class="rat">8.82</td><td>28</td><td>14.7</td><td>1.6</td><td>1.7</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiki Rice</td><td class="l tm">TOR</td><td class="rat">8.35</td><td>17</td><td>11.2</td><td>4.0</td><td>2.8</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Awa Fam Thiam</td><td class="l tm">SEA</td><td class="rat">8.09</td><td>31</td><td>10.6</td><td>5.8</td><td>1.9</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lauren Betts</td><td class="l tm">WAS</td><td class="rat">7.87</td><td>34</td><td>6.4</td><td>4.3</td><td>0.9</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Laura Juskaite</td><td class="l tm">TOR</td><td class="rat">7.51</td><td>33</td><td>10.1</td><td>3.9</td><td>1.6</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Maria Conde</td><td class="l tm">TOR</td><td class="rat">6.67</td><td>32</td><td>9.0</td><td>4.7</td><td>2.6</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Noemie Brochant</td><td class="l tm">PHX</td><td class="rat">6.03</td><td>35</td><td>5.9</td><td>2.1</td><td>1.8</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cotie McMahon</td><td class="l tm">WAS</td><td class="rat">6.02</td><td>32</td><td>6.8</td><td>3.2</td><td>2.0</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/rs.png" alt="" loading="lazy"></td><td class="l pl">Jovana Nogic</td><td class="l tm">PHX</td><td class="rat">5.99</td><td>16</td><td>10.4</td><td>1.1</td><td>1.6</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Frieda Buhner</td><td class="l tm">POR</td><td class="rat">5.07</td><td>32</td><td>6.5</td><td>2.3</td><td>0.7</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/mx.png" alt="" loading="lazy"></td><td class="l pl">Gabriela Jaquez</td><td class="l tm">CHI</td><td class="rat">5.03</td><td>31</td><td>6.8</td><td>3.1</td><td>0.9</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/nz.png" alt="" loading="lazy"></td><td class="l pl">Charlisse Leger-Walker</td><td class="l tm">CON</td><td class="rat">4.85</td><td>33</td><td>6.8</td><td>2.1</td><td>3.3</td></tr></tbody></table></section>
+<section id="intl" class=""><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/si.png" alt="" loading="lazy"></td><td class="l pl">Jessica Shepard</td><td class="l tm">DAL</td><td class="rat">20.08</td><td>33</td><td>14.2</td><td>11.4</td><td>5.2</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/ba.png" alt="" loading="lazy"></td><td class="l pl">Jonquel Jones</td><td class="l tm">NYL</td><td class="rat">17.05</td><td>35</td><td>14.7</td><td>9.4</td><td>2.9</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Kamilla Cardoso</td><td class="l tm">CHI</td><td class="rat">14.62</td><td>34</td><td>14.8</td><td>8.7</td><td>2.4</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Gabby Williams</td><td class="l tm">GSV</td><td class="rat">13.95</td><td>31</td><td>14.6</td><td>3.2</td><td>2.2</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Carla Leite</td><td class="l tm">POR</td><td class="rat">13.40</td><td>32</td><td>15.7</td><td>2.2</td><td>6.2</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Bridget Carleton</td><td class="l tm">POR</td><td class="rat">13.05</td><td>34</td><td>14.5</td><td>4.5</td><td>2.1</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Janelle Salaun</td><td class="l tm">GSV</td><td class="rat">12.89</td><td>32</td><td>13.1</td><td>3.8</td><td>1.1</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Dominique Malonga</td><td class="l tm">SEA</td><td class="rat">11.74</td><td>28</td><td>17.2</td><td>9.0</td><td>1.7</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Megan DiLeo</td><td class="l tm">POR</td><td class="rat">11.13</td><td>33</td><td>12.9</td><td>4.2</td><td>1.0</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/mk.png" alt="" loading="lazy"></td><td class="l pl">DeWanna Bonner</td><td class="l tm">PHX</td><td class="rat">11.04</td><td>36</td><td>10.6</td><td>6.0</td><td>1.5</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Pauline Astier</td><td class="l tm">NYL</td><td class="rat">10.50</td><td>36</td><td>9.4</td><td>2.4</td><td>3.5</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Nyara Sabally</td><td class="l tm">TOR</td><td class="rat">10.16</td><td>24</td><td>12.3</td><td>5.2</td><td>1.7</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/az.png" alt="" loading="lazy"></td><td class="l pl">Tiffany Hayes</td><td class="l tm">GSV</td><td class="rat">9.18</td><td>31</td><td>8.4</td><td>1.6</td><td>2.5</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/be.png" alt="" loading="lazy"></td><td class="l pl">Julie Allemand</td><td class="l tm">TOR</td><td class="rat">8.65</td><td>26</td><td>6.6</td><td>3.1</td><td>5.7</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Marine Johannes</td><td class="l tm">NYL</td><td class="rat">8.62</td><td>33</td><td>9.3</td><td>2.2</td><td>2.5</td></tr></tbody></table></section>
+<section id="bench" class=""><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Janelle Salaun</td><td class="l tm">GSV</td><td class="rat">12.89</td><td>32</td><td>13.1</td><td>3.8</td><td>1.1</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/az.png" alt="" loading="lazy"></td><td class="l pl">Tiffany Hayes</td><td class="l tm">GSV</td><td class="rat">9.18</td><td>31</td><td>8.4</td><td>1.6</td><td>2.5</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sophie Cunningham</td><td class="l tm">IND</td><td class="rat">8.54</td><td>34</td><td>8.7</td><td>2.4</td><td>1.2</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Chennedy Carter</td><td class="l tm">LVA</td><td class="rat">8.01</td><td>13</td><td>12.2</td><td>1.8</td><td>1.3</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lauren Betts</td><td class="l tm">WAS</td><td class="rat">7.87</td><td>34</td><td>6.4</td><td>4.3</td><td>0.9</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aneesah Morrow</td><td class="l tm">TOR</td><td class="rat">7.56</td><td>24</td><td>11.2</td><td>8.2</td><td>1.5</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kaila Charles</td><td class="l tm">GSV</td><td class="rat">7.23</td><td>33</td><td>6.2</td><td>4.5</td><td>1.4</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/cn.png" alt="" loading="lazy"></td><td class="l pl">Han Xu</td><td class="l tm">NYL</td><td class="rat">6.99</td><td>36</td><td>6.0</td><td>2.5</td><td>0.7</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Brionna Jones</td><td class="l tm">ATL</td><td class="rat">6.94</td><td>9</td><td>8.2</td><td>5.6</td><td>2.0</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cameron Brink</td><td class="l tm">LAS</td><td class="rat">6.84</td><td>25</td><td>9.1</td><td>4.9</td><td>1.3</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Kennedy Burke</td><td class="l tm">CON</td><td class="rat">6.82</td><td>32</td><td>8.3</td><td>3.2</td><td>1.4</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jewell Loyd</td><td class="l tm">LVA</td><td class="rat">6.73</td><td>34</td><td>8.1</td><td>2.3</td><td>1.4</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kaitlyn Chen</td><td class="l tm">GSV</td><td class="rat">6.69</td><td>33</td><td>7.0</td><td>1.2</td><td>2.0</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maddy Siegrist</td><td class="l tm">DAL</td><td class="rat">6.18</td><td>32</td><td>6.1</td><td>2.7</td><td>0.8</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cotie McMahon</td><td class="l tm">WAS</td><td class="rat">6.02</td><td>32</td><td>6.8</td><td>3.2</td><td>2.0</td></tr></tbody></table></section>
+<section id="teams" class=""><h3>Atlanta Dream</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rhyne Howard</td><td class="l tm">ATL</td><td class="rat">19.00</td><td>33</td><td>17.8</td><td>3.8</td><td>3.7</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Allisha Gray</td><td class="l tm">ATL</td><td class="rat">17.55</td><td>34</td><td>19.6</td><td>3.2</td><td>2.4</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Angel Reese</td><td class="l tm">ATL</td><td class="rat">16.38</td><td>33</td><td>15.6</td><td>12.1</td><td>2.5</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jordin Canada</td><td class="l tm">ATL</td><td class="rat">14.81</td><td>33</td><td>11.5</td><td>3.7</td><td>7.5</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Naz Hillmon</td><td class="l tm">ATL</td><td class="rat">8.85</td><td>33</td><td>9.0</td><td>4.5</td><td>1.5</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Brionna Jones</td><td class="l tm">ATL</td><td class="rat">6.94</td><td>9</td><td>8.2</td><td>5.6</td><td>2.0</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/ke.png" alt="" loading="lazy"></td><td class="l pl">Madina Okot</td><td class="l tm">ATL</td><td class="rat">4.36</td><td>33</td><td>5.6</td><td>3.6</td><td>0.2</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Isobel Borlase</td><td class="l tm">ATL</td><td class="rat">3.68</td><td>34</td><td>4.6</td><td>1.5</td><td>1.0</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Te-Hina Paopao</td><td class="l tm">ATL</td><td class="rat">2.31</td><td>25</td><td>3.8</td><td>0.9</td><td>1.5</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jaylyn Sherrod</td><td class="l tm">ATL</td><td class="rat">1.57</td><td>10</td><td>2.3</td><td>0.9</td><td>1.1</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/ml.png" alt="" loading="lazy"></td><td class="l pl">Sika Kone</td><td class="l tm">ATL</td><td class="rat">0.64</td><td>28</td><td>1.7</td><td>1.1</td><td>0.2</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aaliyah Nye</td><td class="l tm">ATL</td><td class="rat">0.63</td><td>16</td><td>0.7</td><td>0.2</td><td>0.2</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Indya Nivar</td><td class="l tm">ATL</td><td class="rat">0.62</td><td>20</td><td>0.8</td><td>0.8</td><td>0.3</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Shatori Walker-Kimbrough</td><td class="l tm">ATL</td><td class="rat">0.49</td><td>9</td><td>0.9</td><td>0.2</td><td>0.2</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/ng.png" alt="" loading="lazy"></td><td class="l pl">Amy Okonkwo</td><td class="l tm">ATL</td><td class="rat">-0.05</td><td>1</td><td>1.0</td><td>1.0</td><td>0.0</td></tr></tbody></table>
+<h3>Chicago Sky</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Kamilla Cardoso</td><td class="l tm">CHI</td><td class="rat">14.62</td><td>34</td><td>14.8</td><td>8.7</td><td>2.4</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Natasha Cloud</td><td class="l tm">CHI</td><td class="rat">10.29</td><td>34</td><td>10.5</td><td>3.4</td><td>5.0</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Skylar Diggins</td><td class="l tm">CHI</td><td class="rat">9.88</td><td>19</td><td>14.2</td><td>3.2</td><td>4.9</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sydney Taylor</td><td class="l tm">CHI</td><td class="rat">8.82</td><td>28</td><td>14.7</td><td>1.6</td><td>1.7</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Azura Stevens</td><td class="l tm">CHI</td><td class="rat">7.52</td><td>26</td><td>10.7</td><td>6.6</td><td>2.3</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/hu.png" alt="" loading="lazy"></td><td class="l pl">Courtney Vandersloot</td><td class="l tm">CHI</td><td class="rat">7.41</td><td>18</td><td>9.2</td><td>2.9</td><td>4.8</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rickea Jackson</td><td class="l tm">CHI</td><td class="rat">6.74</td><td>4</td><td>18.0</td><td>4.8</td><td>2.0</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jacy Sheldon</td><td class="l tm">CHI</td><td class="rat">5.94</td><td>35</td><td>6.7</td><td>1.3</td><td>1.6</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Elizabeth Williams</td><td class="l tm">CHI</td><td class="rat">5.07</td><td>35</td><td>5.2</td><td>3.6</td><td>1.5</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/mx.png" alt="" loading="lazy"></td><td class="l pl">Gabriela Jaquez</td><td class="l tm">CHI</td><td class="rat">5.03</td><td>31</td><td>6.8</td><td>3.1</td><td>0.9</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/ml.png" alt="" loading="lazy"></td><td class="l pl">Aicha Coulibaly</td><td class="l tm">CHI</td><td class="rat">4.14</td><td>24</td><td>5.0</td><td>2.5</td><td>0.6</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">DiJonai Carrington</td><td class="l tm">CHI</td><td class="rat">4.04</td><td>8</td><td>10.8</td><td>3.4</td><td>0.6</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rachel Banham</td><td class="l tm">CHI</td><td class="rat">2.99</td><td>31</td><td>4.7</td><td>1.2</td><td>1.1</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Chloe Bibby</td><td class="l tm">CHI</td><td class="rat">2.41</td><td>4</td><td>5.5</td><td>0.5</td><td>1.5</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Saylor Poffenbarger</td><td class="l tm">CHI</td><td class="rat">0.14</td><td>5</td><td>0.0</td><td>1.2</td><td>0.2</td></tr>
+<tr><td class="rk">16</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maddy Westbeld</td><td class="l tm">CHI</td><td class="rat">-0.10</td><td>3</td><td>1.0</td><td>1.3</td><td>0.7</td></tr></tbody></table>
+<h3>Connecticut Sun</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Brittney Griner</td><td class="l tm">CON</td><td class="rat">10.04</td><td>18</td><td>13.2</td><td>5.8</td><td>2.5</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Olivia Nelson-Ododa</td><td class="l tm">CON</td><td class="rat">8.83</td><td>29</td><td>9.9</td><td>6.1</td><td>1.7</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Leila Lacan</td><td class="l tm">CON</td><td class="rat">8.57</td><td>24</td><td>11.7</td><td>2.0</td><td>4.5</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Aaliyah Edwards</td><td class="l tm">CON</td><td class="rat">7.01</td><td>22</td><td>9.9</td><td>4.0</td><td>0.9</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Kennedy Burke</td><td class="l tm">CON</td><td class="rat">6.82</td><td>32</td><td>8.3</td><td>3.2</td><td>1.4</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/nz.png" alt="" loading="lazy"></td><td class="l pl">Charlisse Leger-Walker</td><td class="l tm">CON</td><td class="rat">4.85</td><td>33</td><td>6.8</td><td>2.1</td><td>3.3</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Diamond Miller</td><td class="l tm">CON</td><td class="rat">4.78</td><td>33</td><td>9.3</td><td>2.6</td><td>1.4</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Saniya Rivers</td><td class="l tm">CON</td><td class="rat">4.17</td><td>29</td><td>6.6</td><td>2.2</td><td>3.1</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Hailey Van Lith</td><td class="l tm">CON</td><td class="rat">3.05</td><td>14</td><td>6.1</td><td>1.0</td><td>1.9</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Raegan Beers</td><td class="l tm">CON</td><td class="rat">2.50</td><td>27</td><td>3.3</td><td>3.0</td><td>0.7</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Nell Angloma</td><td class="l tm">CON</td><td class="rat">2.23</td><td>29</td><td>3.7</td><td>1.6</td><td>0.6</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Gianna Kneepkens</td><td class="l tm">CON</td><td class="rat">1.85</td><td>25</td><td>3.2</td><td>1.1</td><td>0.4</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ashlon Jackson</td><td class="l tm">CON</td><td class="rat">0.90</td><td>8</td><td>1.2</td><td>0.8</td><td>0.8</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rayah Marshall</td><td class="l tm">CON</td><td class="rat">-0.88</td><td>2</td><td>0.5</td><td>1.0</td><td>0.0</td></tr></tbody></table>
+<h3>Dallas Wings</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Paige Bueckers</td><td class="l tm">DAL</td><td class="rat">20.75</td><td>33</td><td>20.5</td><td>4.1</td><td>5.8</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/si.png" alt="" loading="lazy"></td><td class="l pl">Jessica Shepard</td><td class="l tm">DAL</td><td class="rat">20.08</td><td>33</td><td>14.2</td><td>11.4</td><td>5.2</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Arike Ogunbowale</td><td class="l tm">DAL</td><td class="rat">12.78</td><td>35</td><td>14.8</td><td>3.1</td><td>3.1</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Azzi Fudd</td><td class="l tm">DAL</td><td class="rat">12.18</td><td>30</td><td>13.1</td><td>1.7</td><td>1.8</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maddy Siegrist</td><td class="l tm">DAL</td><td class="rat">6.18</td><td>32</td><td>6.1</td><td>2.7</td><td>0.8</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/fi.png" alt="" loading="lazy"></td><td class="l pl">Awak Kuier</td><td class="l tm">DAL</td><td class="rat">6.05</td><td>32</td><td>5.6</td><td>3.1</td><td>0.9</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aziaha James</td><td class="l tm">DAL</td><td class="rat">5.17</td><td>34</td><td>6.1</td><td>2.4</td><td>1.2</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Alanna Smith</td><td class="l tm">DAL</td><td class="rat">4.50</td><td>27</td><td>5.7</td><td>4.0</td><td>1.1</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Odyssey Sims</td><td class="l tm">DAL</td><td class="rat">3.99</td><td>26</td><td>5.6</td><td>1.1</td><td>2.2</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/cn.png" alt="" loading="lazy"></td><td class="l pl">Li Yueru</td><td class="l tm">DAL</td><td class="rat">3.08</td><td>26</td><td>3.3</td><td>2.7</td><td>0.5</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sug Sutton</td><td class="l tm">DAL</td><td class="rat">2.86</td><td>20</td><td>3.5</td><td>0.8</td><td>2.2</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Haley Jones</td><td class="l tm">DAL</td><td class="rat">1.64</td><td>7</td><td>4.0</td><td>1.7</td><td>0.7</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/il.png" alt="" loading="lazy"></td><td class="l pl">Alysha Clark</td><td class="l tm">DAL</td><td class="rat">1.38</td><td>22</td><td>2.1</td><td>1.2</td><td>0.5</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/it.png" alt="" loading="lazy"></td><td class="l pl">Costanza Verona</td><td class="l tm">DAL</td><td class="rat">1.27</td><td>1</td><td>4.0</td><td>0.0</td><td>2.0</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">JJ Quinerly</td><td class="l tm">DAL</td><td class="rat">0.62</td><td>2</td><td>1.0</td><td>0.5</td><td>1.0</td></tr></tbody></table>
+<h3>Golden State Valkyries</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Veronica Burton</td><td class="l tm">GSV</td><td class="rat">16.83</td><td>33</td><td>12.3</td><td>3.5</td><td>5.5</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Gabby Williams</td><td class="l tm">GSV</td><td class="rat">13.95</td><td>31</td><td>14.6</td><td>3.2</td><td>2.2</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Janelle Salaun</td><td class="l tm">GSV</td><td class="rat">12.89</td><td>32</td><td>13.1</td><td>3.8</td><td>1.1</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/az.png" alt="" loading="lazy"></td><td class="l pl">Tiffany Hayes</td><td class="l tm">GSV</td><td class="rat">9.18</td><td>31</td><td>8.4</td><td>1.6</td><td>2.5</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kayla Thornton</td><td class="l tm">GSV</td><td class="rat">9.08</td><td>33</td><td>8.5</td><td>5.0</td><td>0.8</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiah Stokes</td><td class="l tm">GSV</td><td class="rat">7.30</td><td>32</td><td>4.0</td><td>5.3</td><td>1.2</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kaila Charles</td><td class="l tm">GSV</td><td class="rat">7.23</td><td>33</td><td>6.2</td><td>4.5</td><td>1.4</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kaitlyn Chen</td><td class="l tm">GSV</td><td class="rat">6.69</td><td>33</td><td>7.0</td><td>1.2</td><td>2.0</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/it.png" alt="" loading="lazy"></td><td class="l pl">Cecilia Zandalasini</td><td class="l tm">GSV</td><td class="rat">6.58</td><td>29</td><td>8.4</td><td>2.0</td><td>1.7</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Laeticia Amihere</td><td class="l tm">GSV</td><td class="rat">4.18</td><td>29</td><td>3.1</td><td>3.3</td><td>1.1</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ashten Prechtel</td><td class="l tm">GSV</td><td class="rat">1.31</td><td>2</td><td>4.0</td><td>2.0</td><td>1.0</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Nadia Fingall</td><td class="l tm">GSV</td><td class="rat">0.75</td><td>5</td><td>1.0</td><td>0.2</td><td>0.2</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Juste Jocyte</td><td class="l tm">GSV</td><td class="rat">0.71</td><td>10</td><td>2.6</td><td>0.5</td><td>0.7</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ndjakalenga Mwenentanda</td><td class="l tm">GSV</td><td class="rat">0.11</td><td>4</td><td>0.0</td><td>0.5</td><td>0.5</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Miela Sowah</td><td class="l tm">GSV</td><td class="rat">-0.52</td><td>2</td><td>0.0</td><td>0.0</td><td>0.0</td></tr></tbody></table>
+<h3>Indiana Fever</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kelsey Mitchell</td><td class="l tm">IND</td><td class="rat">20.79</td><td>35</td><td>24.2</td><td>1.7</td><td>2.7</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Caitlin Clark</td><td class="l tm">IND</td><td class="rat">20.03</td><td>31</td><td>22.0</td><td>3.9</td><td>8.2</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aliyah Boston</td><td class="l tm">IND</td><td class="rat">18.16</td><td>32</td><td>17.0</td><td>8.7</td><td>3.0</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Monique Billings</td><td class="l tm">IND</td><td class="rat">9.45</td><td>34</td><td>7.3</td><td>5.2</td><td>1.1</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sophie Cunningham</td><td class="l tm">IND</td><td class="rat">8.54</td><td>34</td><td>8.7</td><td>2.4</td><td>1.2</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Makayla Timpson</td><td class="l tm">IND</td><td class="rat">5.95</td><td>34</td><td>4.9</td><td>4.4</td><td>0.5</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Tyasha Harris</td><td class="l tm">IND</td><td class="rat">4.99</td><td>30</td><td>4.4</td><td>1.1</td><td>2.1</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lexie Hull</td><td class="l tm">IND</td><td class="rat">4.53</td><td>35</td><td>5.2</td><td>3.1</td><td>0.7</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Myisha Hines-Allen</td><td class="l tm">IND</td><td class="rat">3.60</td><td>30</td><td>3.8</td><td>3.0</td><td>1.5</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Raven Johnson</td><td class="l tm">IND</td><td class="rat">2.48</td><td>32</td><td>3.3</td><td>1.8</td><td>1.3</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Grace VanSlooten</td><td class="l tm">IND</td><td class="rat">1.32</td><td>16</td><td>1.6</td><td>0.6</td><td>0.2</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Damiris Dantas</td><td class="l tm">IND</td><td class="rat">0.91</td><td>12</td><td>3.3</td><td>1.5</td><td>0.3</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Bree Hall</td><td class="l tm">IND</td><td class="rat">0.67</td><td>2</td><td>2.5</td><td>0.5</td><td>0.0</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Mercedes Russell</td><td class="l tm">IND</td><td class="rat">0.14</td><td>2</td><td>1.0</td><td>0.0</td><td>0.0</td></tr></tbody></table>
+<h3>Los Angeles Sparks</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Nneka Ogwumike</td><td class="l tm">LAS</td><td class="rat">16.32</td><td>33</td><td>16.8</td><td>8.8</td><td>3.1</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Dearica Hamby</td><td class="l tm">LAS</td><td class="rat">14.91</td><td>34</td><td>15.1</td><td>7.3</td><td>2.5</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rae Burrell</td><td class="l tm">LAS</td><td class="rat">10.11</td><td>34</td><td>14.1</td><td>2.4</td><td>2.5</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Erica Wheeler</td><td class="l tm">LAS</td><td class="rat">8.07</td><td>34</td><td>9.2</td><td>2.0</td><td>5.3</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ariel Atkins</td><td class="l tm">LAS</td><td class="rat">6.90</td><td>32</td><td>8.8</td><td>2.9</td><td>2.9</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cameron Brink</td><td class="l tm">LAS</td><td class="rat">6.84</td><td>25</td><td>9.1</td><td>4.9</td><td>1.3</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/cm.png" alt="" loading="lazy"></td><td class="l pl">Monique Akoa-Makani</td><td class="l tm">LAS</td><td class="rat">5.49</td><td>21</td><td>9.0</td><td>2.0</td><td>2.4</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Emma Cannon</td><td class="l tm">LAS</td><td class="rat">1.95</td><td>13</td><td>4.0</td><td>1.2</td><td>0.4</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiana Williams</td><td class="l tm">LAS</td><td class="rat">1.79</td><td>21</td><td>3.8</td><td>0.4</td><td>1.2</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/kr.png" alt="" loading="lazy"></td><td class="l pl">Jihyun Park</td><td class="l tm">LAS</td><td class="rat">1.74</td><td>29</td><td>2.4</td><td>1.0</td><td>0.5</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Chance Gray</td><td class="l tm">LAS</td><td class="rat">1.67</td><td>31</td><td>2.8</td><td>1.2</td><td>0.9</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Tonie Morgan</td><td class="l tm">LAS</td><td class="rat">1.38</td><td>2</td><td>5.0</td><td>0.5</td><td>3.5</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kate Martin</td><td class="l tm">LAS</td><td class="rat">1.11</td><td>15</td><td>2.4</td><td>0.9</td><td>0.3</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/dk.png" alt="" loading="lazy"></td><td class="l pl">Laura Ziegler</td><td class="l tm">LAS</td><td class="rat">1.10</td><td>3</td><td>2.7</td><td>1.3</td><td>1.0</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Alissa Pili</td><td class="l tm">LAS</td><td class="rat">0.81</td><td>4</td><td>2.5</td><td>1.8</td><td>0.5</td></tr>
+<tr><td class="rk">16</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sania Feagin</td><td class="l tm">LAS</td><td class="rat">-0.02</td><td>3</td><td>0.0</td><td>0.3</td><td>0.7</td></tr></tbody></table>
+<h3>Las Vegas Aces</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">A'ja Wilson</td><td class="l tm">LVA</td><td class="rat">29.48</td><td>33</td><td>26.1</td><td>9.6</td><td>3.1</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jackie Young</td><td class="l tm">LVA</td><td class="rat">21.85</td><td>35</td><td>18.4</td><td>4.4</td><td>6.7</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Chelsea Gray</td><td class="l tm">LVA</td><td class="rat">14.52</td><td>35</td><td>12.3</td><td>3.2</td><td>7.1</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">NaLyssa Smith</td><td class="l tm">LVA</td><td class="rat">13.31</td><td>35</td><td>12.0</td><td>6.5</td><td>0.9</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Chennedy Carter</td><td class="l tm">LVA</td><td class="rat">8.01</td><td>13</td><td>12.2</td><td>1.8</td><td>1.3</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jewell Loyd</td><td class="l tm">LVA</td><td class="rat">6.73</td><td>34</td><td>8.1</td><td>2.3</td><td>1.4</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cheyenne Parker-Tyus</td><td class="l tm">LVA</td><td class="rat">4.84</td><td>23</td><td>4.9</td><td>2.5</td><td>0.6</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Stephanie Talbot</td><td class="l tm">LVA</td><td class="rat">4.01</td><td>36</td><td>3.3</td><td>2.5</td><td>1.0</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/jp.png" alt="" loading="lazy"></td><td class="l pl">Mai Yamamoto</td><td class="l tm">LVA</td><td class="rat">3.26</td><td>6</td><td>5.7</td><td>0.3</td><td>1.5</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Justine Pissott</td><td class="l tm">LVA</td><td class="rat">2.46</td><td>6</td><td>6.3</td><td>1.3</td><td>0.5</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Brianna Turner</td><td class="l tm">LVA</td><td class="rat">2.07</td><td>33</td><td>1.8</td><td>2.2</td><td>0.2</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ta'Niya Latson</td><td class="l tm">LVA</td><td class="rat">1.59</td><td>15</td><td>3.1</td><td>1.0</td><td>0.5</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kierstan Bell</td><td class="l tm">LVA</td><td class="rat">1.42</td><td>23</td><td>2.0</td><td>1.6</td><td>0.7</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Dana Evans</td><td class="l tm">LVA</td><td class="rat">0.66</td><td>10</td><td>3.4</td><td>1.8</td><td>2.0</td></tr></tbody></table>
+<h3>Minnesota Lynx</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Olivia Miles</td><td class="l tm">MIN</td><td class="rat">21.93</td><td>34</td><td>19.9</td><td>4.6</td><td>6.1</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Natasha Howard</td><td class="l tm">MIN</td><td class="rat">20.11</td><td>36</td><td>15.1</td><td>7.8</td><td>3.2</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kayla McBride</td><td class="l tm">MIN</td><td class="rat">19.92</td><td>36</td><td>18.2</td><td>3.2</td><td>2.1</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Courtney Williams</td><td class="l tm">MIN</td><td class="rat">15.46</td><td>36</td><td>14.6</td><td>5.1</td><td>4.2</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Napheesa Collier</td><td class="l tm">MIN</td><td class="rat">14.83</td><td>9</td><td>19.1</td><td>7.3</td><td>3.2</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Nia Coffey</td><td class="l tm">MIN</td><td class="rat">9.85</td><td>36</td><td>6.8</td><td>4.6</td><td>1.9</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/ru.png" alt="" loading="lazy"></td><td class="l pl">Anastasiia Olairi Kosu</td><td class="l tm">MIN</td><td class="rat">4.76</td><td>27</td><td>4.0</td><td>2.2</td><td>0.7</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maya Caldwell</td><td class="l tm">MIN</td><td class="rat">4.47</td><td>36</td><td>4.0</td><td>2.2</td><td>1.1</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/be.png" alt="" loading="lazy"></td><td class="l pl">Antonia Delaere</td><td class="l tm">MIN</td><td class="rat">3.59</td><td>35</td><td>3.1</td><td>0.7</td><td>1.1</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/hu.png" alt="" loading="lazy"></td><td class="l pl">Dorka Juhasz</td><td class="l tm">MIN</td><td class="rat">3.51</td><td>14</td><td>3.7</td><td>2.5</td><td>1.5</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/cz.png" alt="" loading="lazy"></td><td class="l pl">Emma Cechova</td><td class="l tm">MIN</td><td class="rat">2.50</td><td>3</td><td>8.3</td><td>3.7</td><td>0.0</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/cz.png" alt="" loading="lazy"></td><td class="l pl">Eliska Joklova</td><td class="l tm">MIN</td><td class="rat">1.97</td><td>18</td><td>2.0</td><td>1.2</td><td>1.1</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Liatu King</td><td class="l tm">MIN</td><td class="rat">1.81</td><td>8</td><td>3.0</td><td>2.9</td><td>0.0</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Teaira McCowan</td><td class="l tm">MIN</td><td class="rat">0.60</td><td>10</td><td>1.4</td><td>2.4</td><td>0.3</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/nl.png" alt="" loading="lazy"></td><td class="l pl">Emese Hof</td><td class="l tm">MIN</td><td class="rat">0.08</td><td>3</td><td>2.3</td><td>1.7</td><td>0.7</td></tr></tbody></table>
+<h3>New York Liberty</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Breanna Stewart</td><td class="l tm">NYL</td><td class="rat">21.82</td><td>35</td><td>20.7</td><td>8.2</td><td>3.2</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/ba.png" alt="" loading="lazy"></td><td class="l pl">Jonquel Jones</td><td class="l tm">NYL</td><td class="rat">17.05</td><td>35</td><td>14.7</td><td>9.4</td><td>2.9</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sabrina Ionescu</td><td class="l tm">NYL</td><td class="rat">12.19</td><td>23</td><td>16.0</td><td>4.0</td><td>4.5</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Pauline Astier</td><td class="l tm">NYL</td><td class="rat">10.50</td><td>36</td><td>9.4</td><td>2.4</td><td>3.5</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Marine Johannes</td><td class="l tm">NYL</td><td class="rat">8.62</td><td>33</td><td>9.3</td><td>2.2</td><td>2.5</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/cn.png" alt="" loading="lazy"></td><td class="l pl">Han Xu</td><td class="l tm">NYL</td><td class="rat">6.99</td><td>36</td><td>6.0</td><td>2.5</td><td>0.7</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Leonie Fiebich</td><td class="l tm">NYL</td><td class="rat">6.92</td><td>14</td><td>10.0</td><td>2.6</td><td>1.9</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rebekah Gardner</td><td class="l tm">NYL</td><td class="rat">5.80</td><td>34</td><td>5.2</td><td>2.6</td><td>1.3</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Satou Sabally</td><td class="l tm">NYL</td><td class="rat">5.71</td><td>13</td><td>10.4</td><td>2.8</td><td>1.9</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Rebecca Allen</td><td class="l tm">NYL</td><td class="rat">3.99</td><td>21</td><td>5.2</td><td>2.2</td><td>0.7</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/be.png" alt="" loading="lazy"></td><td class="l pl">Julie Vanloo</td><td class="l tm">NYL</td><td class="rat">3.87</td><td>5</td><td>5.8</td><td>2.0</td><td>5.4</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Marine Fauthoux</td><td class="l tm">NYL</td><td class="rat">2.93</td><td>15</td><td>4.3</td><td>2.3</td><td>2.1</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Raquel Carrera</td><td class="l tm">NYL</td><td class="rat">1.32</td><td>19</td><td>1.6</td><td>1.1</td><td>0.4</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Alexandra Fowler</td><td class="l tm">NYL</td><td class="rat">0.57</td><td>2</td><td>6.0</td><td>0.0</td><td>0.5</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Anneli Maley</td><td class="l tm">NYL</td><td class="rat">0.32</td><td>7</td><td>0.9</td><td>1.4</td><td>0.3</td></tr>
+<tr><td class="rk">16</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aubrey Griffin</td><td class="l tm">NYL</td><td class="rat">0.09</td><td>4</td><td>0.5</td><td>0.2</td><td>0.0</td></tr></tbody></table>
+<h3>Phoenix Mercury</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Alyssa Thomas</td><td class="l tm">PHX</td><td class="rat">16.65</td><td>34</td><td>14.9</td><td>7.5</td><td>8.2</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kelsey Plum</td><td class="l tm">PHX</td><td class="rat">15.34</td><td>16</td><td>22.2</td><td>2.2</td><td>5.6</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kahleah Copper</td><td class="l tm">PHX</td><td class="rat">13.65</td><td>35</td><td>20.5</td><td>3.6</td><td>1.9</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/mk.png" alt="" loading="lazy"></td><td class="l pl">DeWanna Bonner</td><td class="l tm">PHX</td><td class="rat">11.04</td><td>36</td><td>10.6</td><td>6.0</td><td>1.5</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Natasha Mack</td><td class="l tm">PHX</td><td class="rat">9.58</td><td>28</td><td>8.3</td><td>6.7</td><td>1.3</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Noemie Brochant</td><td class="l tm">PHX</td><td class="rat">6.03</td><td>35</td><td>5.9</td><td>2.1</td><td>1.8</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/rs.png" alt="" loading="lazy"></td><td class="l pl">Jovana Nogic</td><td class="l tm">PHX</td><td class="rat">5.99</td><td>16</td><td>10.4</td><td>1.1</td><td>1.6</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Valeriane Ayayi</td><td class="l tm">PHX</td><td class="rat">5.57</td><td>30</td><td>6.6</td><td>2.8</td><td>1.2</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lexi Held</td><td class="l tm">PHX</td><td class="rat">3.22</td><td>34</td><td>4.6</td><td>1.2</td><td>1.3</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Sami Whitcomb</td><td class="l tm">PHX</td><td class="rat">2.30</td><td>13</td><td>4.8</td><td>1.8</td><td>1.8</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/be.png" alt="" loading="lazy"></td><td class="l pl">Kyara Linskens</td><td class="l tm">PHX</td><td class="rat">2.14</td><td>18</td><td>3.1</td><td>2.4</td><td>0.7</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Marta Suarez</td><td class="l tm">PHX</td><td class="rat">1.11</td><td>14</td><td>3.2</td><td>1.2</td><td>0.4</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Peyton Williams</td><td class="l tm">PHX</td><td class="rat">0.54</td><td>1</td><td>0.0</td><td>0.0</td><td>2.0</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sha Carter</td><td class="l tm">PHX</td><td class="rat">0.53</td><td>13</td><td>1.2</td><td>0.7</td><td>0.5</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Shay Ciezki</td><td class="l tm">PHX</td><td class="rat">0.50</td><td>2</td><td>1.5</td><td>0.5</td><td>0.5</td></tr></tbody></table>
+<h3>Portland Fire</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Carla Leite</td><td class="l tm">POR</td><td class="rat">13.40</td><td>32</td><td>15.7</td><td>2.2</td><td>6.2</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Bridget Carleton</td><td class="l tm">POR</td><td class="rat">13.05</td><td>34</td><td>14.5</td><td>4.5</td><td>2.1</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Megan DiLeo</td><td class="l tm">POR</td><td class="rat">11.13</td><td>33</td><td>12.9</td><td>4.2</td><td>1.0</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Emily Engstler</td><td class="l tm">POR</td><td class="rat">9.64</td><td>35</td><td>9.0</td><td>5.3</td><td>2.1</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sarah Ashlee Barker</td><td class="l tm">POR</td><td class="rat">8.24</td><td>26</td><td>10.7</td><td>4.5</td><td>2.4</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Frieda Buhner</td><td class="l tm">POR</td><td class="rat">5.07</td><td>32</td><td>6.5</td><td>2.3</td><td>0.7</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Serah Williams</td><td class="l tm">POR</td><td class="rat">3.64</td><td>31</td><td>4.2</td><td>2.5</td><td>0.5</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/gb.png" alt="" loading="lazy"></td><td class="l pl">Karlie Samuelson</td><td class="l tm">POR</td><td class="rat">3.53</td><td>23</td><td>4.8</td><td>1.4</td><td>0.9</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/si.png" alt="" loading="lazy"></td><td class="l pl">Teja Oblak</td><td class="l tm">POR</td><td class="rat">3.43</td><td>26</td><td>5.9</td><td>1.6</td><td>3.0</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jordan Harrison</td><td class="l tm">POR</td><td class="rat">3.40</td><td>8</td><td>5.6</td><td>2.0</td><td>3.6</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Nyadiew Puoch</td><td class="l tm">POR</td><td class="rat">2.76</td><td>34</td><td>3.9</td><td>1.8</td><td>0.7</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/gb.png" alt="" loading="lazy"></td><td class="l pl">Holly Winterburn</td><td class="l tm">POR</td><td class="rat">2.72</td><td>22</td><td>3.2</td><td>1.2</td><td>2.0</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/ba.png" alt="" loading="lazy"></td><td class="l pl">Kamiah Smalls</td><td class="l tm">POR</td><td class="rat">2.57</td><td>2</td><td>7.5</td><td>0.0</td><td>3.0</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Luisa Geiselsoder</td><td class="l tm">POR</td><td class="rat">2.28</td><td>21</td><td>4.5</td><td>2.6</td><td>1.3</td></tr></tbody></table>
+<h3>Seattle Storm</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Natisha Hiedeman</td><td class="l tm">SEA</td><td class="rat">12.11</td><td>36</td><td>15.4</td><td>2.7</td><td>4.8</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Dominique Malonga</td><td class="l tm">SEA</td><td class="rat">11.74</td><td>28</td><td>17.2</td><td>9.0</td><td>1.7</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Flau'jae Johnson</td><td class="l tm">SEA</td><td class="rat">9.79</td><td>35</td><td>13.5</td><td>4.9</td><td>3.0</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Awa Fam Thiam</td><td class="l tm">SEA</td><td class="rat">8.09</td><td>31</td><td>10.6</td><td>5.8</td><td>1.9</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Jade Melbourne</td><td class="l tm">SEA</td><td class="rat">7.57</td><td>36</td><td>9.3</td><td>2.0</td><td>3.9</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Zia Cooke</td><td class="l tm">SEA</td><td class="rat">3.93</td><td>37</td><td>7.5</td><td>1.6</td><td>0.9</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jordan Horston</td><td class="l tm">SEA</td><td class="rat">3.91</td><td>32</td><td>5.0</td><td>3.7</td><td>1.3</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Katie Lou Samuelson</td><td class="l tm">SEA</td><td class="rat">3.54</td><td>29</td><td>4.4</td><td>2.0</td><td>0.7</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Ezi Magbegor</td><td class="l tm">SEA</td><td class="rat">3.31</td><td>11</td><td>7.2</td><td>4.2</td><td>1.8</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Stefanie Dolson</td><td class="l tm">SEA</td><td class="rat">3.21</td><td>37</td><td>3.4</td><td>2.3</td><td>1.1</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Mackenzie Holmes</td><td class="l tm">SEA</td><td class="rat">2.87</td><td>23</td><td>2.7</td><td>3.0</td><td>0.6</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lexie Brown</td><td class="l tm">SEA</td><td class="rat">2.49</td><td>10</td><td>3.8</td><td>1.3</td><td>1.1</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Taylor Thierry</td><td class="l tm">SEA</td><td class="rat">1.16</td><td>11</td><td>1.2</td><td>1.3</td><td>0.3</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Joyner Holmes</td><td class="l tm">SEA</td><td class="rat">0.76</td><td>1</td><td>2.0</td><td>5.0</td><td>1.0</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Taina Mair</td><td class="l tm">SEA</td><td class="rat">0.03</td><td>6</td><td>1.2</td><td>0.3</td><td>0.5</td></tr></tbody></table>
+<h3>Toronto Tempo</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Marina Mabrey</td><td class="l tm">TOR</td><td class="rat">14.99</td><td>31</td><td>20.8</td><td>3.4</td><td>3.7</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Brittney Sykes</td><td class="l tm">TOR</td><td class="rat">13.42</td><td>15</td><td>20.1</td><td>3.8</td><td>3.5</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Nyara Sabally</td><td class="l tm">TOR</td><td class="rat">10.16</td><td>24</td><td>12.3</td><td>5.2</td><td>1.7</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/be.png" alt="" loading="lazy"></td><td class="l pl">Julie Allemand</td><td class="l tm">TOR</td><td class="rat">8.65</td><td>26</td><td>6.6</td><td>3.1</td><td>5.7</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiki Rice</td><td class="l tm">TOR</td><td class="rat">8.35</td><td>17</td><td>11.2</td><td>4.0</td><td>2.8</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Isabelle Harrison</td><td class="l tm">TOR</td><td class="rat">7.65</td><td>21</td><td>12.0</td><td>5.7</td><td>1.6</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aneesah Morrow</td><td class="l tm">TOR</td><td class="rat">7.56</td><td>24</td><td>11.2</td><td>8.2</td><td>1.5</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Laura Juskaite</td><td class="l tm">TOR</td><td class="rat">7.51</td><td>33</td><td>10.1</td><td>3.9</td><td>1.6</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Maria Conde</td><td class="l tm">TOR</td><td class="rat">6.67</td><td>32</td><td>9.0</td><td>4.7</td><td>2.6</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Kia Nurse</td><td class="l tm">TOR</td><td class="rat">2.89</td><td>32</td><td>4.8</td><td>1.0</td><td>0.8</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/gb.png" alt="" loading="lazy"></td><td class="l pl">Temi Fagbenle</td><td class="l tm">TOR</td><td class="rat">2.81</td><td>16</td><td>4.6</td><td>3.3</td><td>1.0</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Teonni Key</td><td class="l tm">TOR</td><td class="rat">1.27</td><td>29</td><td>1.6</td><td>1.5</td><td>0.3</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Tima Pouye</td><td class="l tm">TOR</td><td class="rat">1.23</td><td>19</td><td>3.2</td><td>0.8</td><td>1.2</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/ba.png" alt="" loading="lazy"></td><td class="l pl">Nikolina Milic</td><td class="l tm">TOR</td><td class="rat">0.88</td><td>7</td><td>3.0</td><td>1.3</td><td>0.4</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Kayla Alexander</td><td class="l tm">TOR</td><td class="rat">0.83</td><td>4</td><td>2.2</td><td>2.8</td><td>0.5</td></tr>
+<tr><td class="rk">16</td><td class="fl"><img src="https://flagcdn.com/w40/gr.png" alt="" loading="lazy"></td><td class="l pl">Mariella Fasoula</td><td class="l tm">TOR</td><td class="rat">0.22</td><td>3</td><td>1.3</td><td>1.0</td><td>0.3</td></tr>
+<tr><td class="rk">17</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Ornella Bankole</td><td class="l tm">TOR</td><td class="rat">0.01</td><td>3</td><td>0.7</td><td>0.7</td><td>0.0</td></tr></tbody></table>
+<h3>Washington Mystics</h3><table><thead><tr>
+<th></th><th></th>
+<th class="l" data-s="t">Player</th><th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
+<th data-s="n">Reb</th><th data-s="n">Ast</th>
+</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sonia Citron</td><td class="l tm">WAS</td><td class="rat">16.87</td><td>31</td><td>17.3</td><td>3.9</td><td>4.0</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Shakira Austin</td><td class="l tm">WAS</td><td class="rat">16.74</td><td>33</td><td>16.7</td><td>9.5</td><td>2.5</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiki Iriafen</td><td class="l tm">WAS</td><td class="rat">14.52</td><td>31</td><td>14.8</td><td>9.1</td><td>1.7</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lauren Betts</td><td class="l tm">WAS</td><td class="rat">7.87</td><td>34</td><td>6.4</td><td>4.3</td><td>0.9</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Michaela Onyenwere</td><td class="l tm">WAS</td><td class="rat">7.08</td><td>30</td><td>8.9</td><td>3.1</td><td>1.7</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cotie McMahon</td><td class="l tm">WAS</td><td class="rat">6.02</td><td>32</td><td>6.8</td><td>3.2</td><td>2.0</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Georgia Amoore</td><td class="l tm">WAS</td><td class="rat">3.34</td><td>34</td><td>5.6</td><td>1.1</td><td>3.4</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/rs.png" alt="" loading="lazy"></td><td class="l pl">Angela Dugalic</td><td class="l tm">WAS</td><td class="rat">2.65</td><td>29</td><td>3.2</td><td>2.8</td><td>0.7</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Betnijah Laney-Hamilton</td><td class="l tm">WAS</td><td class="rat">2.64</td><td>20</td><td>4.5</td><td>1.9</td><td>1.6</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Alicia Florez</td><td class="l tm">WAS</td><td class="rat">2.61</td><td>25</td><td>3.6</td><td>1.6</td><td>2.2</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lucy Olsen</td><td class="l tm">WAS</td><td class="rat">1.82</td><td>17</td><td>3.1</td><td>0.6</td><td>1.1</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Ally Wilson</td><td class="l tm">WAS</td><td class="rat">0.65</td><td>4</td><td>3.0</td><td>1.8</td><td>0.8</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Cass Prosper</td><td class="l tm">WAS</td><td class="rat">0.49</td><td>30</td><td>2.4</td><td>1.2</td><td>0.5</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rori Harmon</td><td class="l tm">WAS</td><td class="rat">0.15</td><td>10</td><td>1.0</td><td>0.8</td><td>1.1</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Darianna Littlepage-Buggs</td><td class="l tm">WAS</td><td class="rat">0.00</td><td>1</td><td>0.0</td><td>0.0</td><td>0.0</td></tr></tbody></table></section>
 </div>
 <script>
-/* Reorder and reveal rows that are already in the page. Nothing is fetched, and
-   with scripting off the table stands as a static top 30. */
 (function(){
-  var tb = document.querySelector("tbody");
-  if(!tb) return;
-  var all = [].slice.call(tb.querySelectorAll("tr"));
-  var hidden = all.filter(function(r){ return r.className === "more"; });
-  var open = false, key = -1, desc = true;
-
-  var btn = document.getElementById("more");
-  if(hidden.length && btn){
-    btn.hidden = false;
-    btn.addEventListener("click", function(){
-      open = !open;
-      // The rank column is renumbered rather than kept, so a sorted list reads
-      // 1..N in the order shown instead of carrying its old positions along.
-      draw();
-      btn.textContent = open ? "Show top 30"
-                             : "Show all " + all.length;
-    });
-  }
-
-  var ths = [].slice.call(document.querySelectorAll("thead th"));
-  ths.forEach(function(th, i){
-    if(!th.getAttribute("data-s")) return;
-    th.style.cursor = "pointer";
-    th.addEventListener("click", function(){
-      // Same column again reverses; a new column starts descending, which is what
-      // a reader wants from a rating and from every per-game figure here.
-      if(key === i) desc = !desc; else { key = i; desc = true; }
-      var numeric = th.getAttribute("data-s") === "n";
-      all.sort(function(a, b){
-        var x = a.cells[i].textContent.trim(), y = b.cells[i].textContent.trim();
-        if(numeric){
-          var nx = parseFloat(x) || 0, ny = parseFloat(y) || 0;
-          return desc ? ny - nx : nx - ny;
-        }
-        return desc ? y.localeCompare(x) : x.localeCompare(y);
+  // TABS. Every section is already in the page; this only changes which is shown.
+  var tabs = [].slice.call(document.querySelectorAll("nav button"));
+  var secs = [].slice.call(document.querySelectorAll("section"));
+  tabs.forEach(function(b){
+    b.addEventListener("click", function(){
+      tabs.forEach(function(o){ o.removeAttribute("aria-current"); });
+      b.setAttribute("aria-current", "true");
+      secs.forEach(function(s){
+        s.className = (s.id === b.getAttribute("data-for")) ? "on" : "";
       });
-      ths.forEach(function(o){ o.removeAttribute("aria-sort"); });
-      th.setAttribute("aria-sort", desc ? "descending" : "ascending");
-      draw();
     });
   });
 
-  function draw(){
-    var show = open ? all : all.slice(0, 30);
-    tb.innerHTML = "";
-    show.forEach(function(r, n){
-      r.cells[0].textContent = n + 1;
-      r.className = "";
-      tb.appendChild(r);
+  // SORTING AND THE TOGGLE, PER TABLE, so one section's state does not follow the
+  // reader into another.
+  [].slice.call(document.querySelectorAll("table")).forEach(function(tbl){
+    var tb = tbl.querySelector("tbody");
+    if(!tb) return;
+    var all = [].slice.call(tb.querySelectorAll("tr"));
+    var visible = all.filter(function(r){ return r.className !== "more"; }).length;
+    var open = false, key = -1, desc = true;
+
+    var next = tbl.nextElementSibling;
+    var btn = next && next.querySelector ? next.querySelector(".showall") : null;
+    if(btn && all.length > visible){
+      btn.hidden = false;
+      btn.addEventListener("click", function(){
+        open = !open;
+        draw();
+        btn.textContent = open ? ("Show top " + visible)
+                               : ("Show all " + all.length);
+      });
+    }
+
+    var ths = [].slice.call(tbl.querySelectorAll("thead th"));
+    ths.forEach(function(th, i){
+      if(!th.getAttribute("data-s")) return;
+      th.addEventListener("click", function(){
+        // The same column again reverses; a new one starts descending, which is
+        // what a reader wants from a rating and from every per-game figure here.
+        if(key === i) desc = !desc; else { key = i; desc = true; }
+        var numeric = th.getAttribute("data-s") === "n";
+        all.sort(function(a, b){
+          var x = a.cells[i].textContent.trim(), y = b.cells[i].textContent.trim();
+          if(numeric){
+            var nx = parseFloat(x) || 0, ny = parseFloat(y) || 0;
+            return desc ? ny - nx : nx - ny;
+          }
+          return desc ? y.localeCompare(x) : x.localeCompare(y);
+        });
+        ths.forEach(function(o){ o.removeAttribute("aria-sort"); });
+        th.setAttribute("aria-sort", desc ? "descending" : "ascending");
+        draw();
+      });
     });
-  }
+
+    function draw(){
+      var show = (btn && !open) ? all.slice(0, visible) : all;
+      tb.innerHTML = "";
+      show.forEach(function(r, n){
+        // Renumbered rather than kept, so a sorted list reads 1..N in the order
+        // shown instead of carrying old positions along.
+        r.cells[0].textContent = n + 1;
+        r.className = "";
+        tb.appendChild(r);
+      });
+    }
+  });
 })();
 </script>
 </body></html>
