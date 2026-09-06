@@ -1,56 +1,51 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WNBA Global Rating</title>
+<title>Global Rating</title>
 <style>
 :root{color-scheme:light}
 *{box-sizing:border-box}
 body{margin:0;padding:0;background:#fff;
   font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,
   sans-serif;color:#1a1a2e}
-.wrap{max-width:640px;margin:0 auto;padding:2px}
+.wrap{max-width:660px;margin:0 auto;padding:2px}
 h2{margin:0 0 8px;font-size:17px;letter-spacing:-.2px}
-section{display:block;margin:0 0 26px}
-section > h3{margin:0 0 8px;font-size:15px;letter-spacing:-.1px;color:#1a1a2e;
-  font-weight:700;padding-bottom:4px;border-bottom:2px solid #ecedf3}
-section h4{margin:16px 0 5px;font-size:12px;color:#5a5a72;font-weight:700;
-  text-transform:uppercase;letter-spacing:.4px}
-/* EVERY TABLE THE SAME SHAPE.
-   With auto layout each table sizes itself to its own contents, so the Rookies
-   table put Player in a different place from the Top 30 and the eye had to find
-   the columns again at every heading. Fixed layout plus one set of widths makes
-   them all agree -- the name column is wide enough for the longest in the league,
-   and the numbers line up straight down the page. */
+.pick{margin:0 0 12px}
+select{font:inherit;font-size:13px;padding:4px 8px;border:1px solid #d8d9e3;
+  border-radius:8px;background:#fff;color:#1a1a2e;max-width:100%}
+section{display:none}
+section.on{display:block}
 table{border-collapse:collapse;width:100%;table-layout:fixed}
-/* Wide enough for three digits. A team table carries LEAGUE positions, so it
-   reaches 226 -- and at 30px those truncated to "1..." and "2...", which is worse
-   than no number at all. */
 col.c-rk{width:38px}
 col.c-fl{width:26px}
 col.c-pl{width:auto}
-col.c-tm{width:52px}
-col.c-rat{width:60px}
+col.c-age{width:58px}
+col.c-cp{width:30%}
+col.c-rat{width:58px}
 col.c-gp{width:42px}
-col.c-num{width:52px}
+col.c-num{width:50px}
 th,td{padding:5px 6px;border-bottom:1px solid #ecedf3;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
-/* THE NAME WRAPS RATHER THAN TRUNCATES.
-   Everything else in the row is short and fixed, so the name is the only column
-   that can run out of room -- and on a phone it did, leaving "A'ja W..." and
-   "Jonqu...". A name is the one thing a reader cannot reconstruct from a
-   fragment, so it takes a second line instead of losing its end. */
-td.pl{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25}
 th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#6a6a80;
   text-align:right;border-bottom:1px solid #d8d9e3}
 th.l,td.l{text-align:left}
 td{text-align:right;font-variant-numeric:tabular-nums}
-/* Never clipped: a rank that reads "1..." could be 1, 14 or 226. */
 td.rk{color:#9a9ab0;font-size:12px;overflow:visible;text-overflow:clip}
 td.fl{width:1%;padding-right:0}
 td.fl img{display:block;width:19px;height:auto;border-radius:2px}
-td.pl{font-weight:600}
-td.tm{color:#5a5a72;font-size:12px;letter-spacing:.3px}
+/* The name wraps rather than truncates: it is the one thing a reader cannot
+   reconstruct from a fragment. */
+td.pl{font-weight:600;white-space:normal;overflow:visible;text-overflow:clip;
+  line-height:1.25}
+td.tm{color:#5a5a72;font-size:12px}
 td.rat{font-weight:700;color:#8a5a00}
+/* Left, with its header: the age sits beside the name and reads as part of it,
+   and a right-aligned header over a left-aligned column looks like a mistake. */
+td.age{color:#5a5a72;font-size:12px;font-variant-numeric:tabular-nums;
+  text-align:left}
+/* The hover is the only place the full breakdown lives, so the cell says it is
+   there rather than leaving a reader to discover it. */
+td.tm[title]{cursor:help;text-decoration:underline dotted #c8c8d8}
 tr:nth-child(even) td{background:#fafafd}
 th[data-s]{cursor:pointer}
 th[data-s]:hover{color:#1a1a2e}
@@ -58,443 +53,306 @@ th[aria-sort]{color:#8a5a00}
 th[aria-sort="descending"]::after{content:" ↓"}
 th[aria-sort="ascending"]::after{content:" ↑"}
 .none{color:#8a8aa0;font-size:12px;margin:4px 0 0}
-/* On a phone the numbers give up their padding first, so the name keeps as much
-   width as possible before it has to wrap at all. */
+.unk{color:#b08030;font-weight:700;margin-left:2px}
+.key{color:#8a8aa0;font-size:11px;margin:8px 0 0}
 @media(max-width:560px){
   th,td{padding:5px 2px;font-size:13px}
+  th{font-size:10px;letter-spacing:.2px}
   col.c-rk{width:32px}
   col.c-fl{width:22px}
-  col.c-tm{width:38px}
+  col.c-age{width:48px}
+  col.c-cp{width:26%}
   col.c-rat{width:48px}
-  col.c-gp{width:28px}
+  col.c-gp{width:30px}
   col.c-num{width:38px}
-  th{font-size:10px;letter-spacing:.2px}
-}
-@media(max-width:380px){
-  col.c-gp{width:24px}
-  col.c-num{width:34px}
-  th,td{font-size:12px}
 }
 </style></head><body><div class="wrap">
-<h2>WNBA &mdash; Global Rating</h2>
-<section id="all"><h3>Top 30</h3><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">A'ja Wilson</td><td class="l tm">LVA</td><td class="rat">28.31</td><td>37</td><td>26.0</td><td>9.4</td><td>3.2</td></tr>
-<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kelsey Mitchell</td><td class="l tm">IND</td><td class="rat">22.43</td><td>40</td><td>25.0</td><td>1.7</td><td>2.8</td></tr>
-<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jackie Young</td><td class="l tm">LVA</td><td class="rat">22.07</td><td>39</td><td>18.9</td><td>4.5</td><td>6.6</td></tr>
-<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Breanna Stewart</td><td class="l tm">NYL</td><td class="rat">21.60</td><td>39</td><td>20.4</td><td>8.1</td><td>3.2</td></tr>
-<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Olivia Miles</td><td class="l tm">MIN</td><td class="rat">21.19</td><td>38</td><td>19.7</td><td>4.6</td><td>6.0</td></tr>
-<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Paige Bueckers</td><td class="l tm">DAL</td><td class="rat">20.93</td><td>38</td><td>20.5</td><td>4.1</td><td>5.9</td></tr>
-<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Natasha Howard</td><td class="l tm">MIN</td><td class="rat">19.99</td><td>40</td><td>14.9</td><td>7.7</td><td>3.4</td></tr>
-<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/si.png" alt="" loading="lazy"></td><td class="l pl">Jessica Shepard</td><td class="l tm">DAL</td><td class="rat">19.94</td><td>38</td><td>14.4</td><td>11.1</td><td>4.9</td></tr>
-<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kayla McBride</td><td class="l tm">MIN</td><td class="rat">19.71</td><td>40</td><td>18.1</td><td>3.1</td><td>2.1</td></tr>
-<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Caitlin Clark</td><td class="l tm">IND</td><td class="rat">19.59</td><td>36</td><td>22.5</td><td>3.9</td><td>8.3</td></tr>
-<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rhyne Howard</td><td class="l tm">ATL</td><td class="rat">19.40</td><td>39</td><td>18.3</td><td>3.8</td><td>3.6</td></tr>
-<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Allisha Gray</td><td class="l tm">ATL</td><td class="rat">18.36</td><td>40</td><td>19.3</td><td>3.4</td><td>2.6</td></tr>
-<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Veronica Burton</td><td class="l tm">GSV</td><td class="rat">18.35</td><td>40</td><td>12.3</td><td>3.5</td><td>5.8</td></tr>
-<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Angel Reese</td><td class="l tm">ATL</td><td class="rat">18.18</td><td>39</td><td>16.1</td><td>12.4</td><td>2.8</td></tr>
-<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Shakira Austin</td><td class="l tm">WAS</td><td class="rat">17.23</td><td>39</td><td>16.8</td><td>9.4</td><td>2.5</td></tr>
-<tr><td class="rk">16</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aliyah Boston</td><td class="l tm">IND</td><td class="rat">17.07</td><td>36</td><td>16.9</td><td>8.2</td><td>3.0</td></tr>
-<tr><td class="rk">17</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Nneka Ogwumike</td><td class="l tm">LAS</td><td class="rat">16.93</td><td>39</td><td>17.2</td><td>8.9</td><td>3.0</td></tr>
-<tr><td class="rk">18</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sonia Citron</td><td class="l tm">WAS</td><td class="rat">16.63</td><td>37</td><td>16.8</td><td>3.7</td><td>4.3</td></tr>
-<tr><td class="rk">19</td><td class="fl"><img src="https://flagcdn.com/w40/ba.png" alt="" loading="lazy"></td><td class="l pl">Jonquel Jones</td><td class="l tm">NYL</td><td class="rat">16.51</td><td>39</td><td>14.6</td><td>9.0</td><td>2.7</td></tr>
-<tr><td class="rk">20</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Alyssa Thomas</td><td class="l tm">PHX</td><td class="rat">15.98</td><td>38</td><td>14.2</td><td>7.7</td><td>8.4</td></tr>
-<tr><td class="rk">21</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jordin Canada</td><td class="l tm">ATL</td><td class="rat">15.41</td><td>39</td><td>11.6</td><td>3.7</td><td>7.4</td></tr>
-<tr><td class="rk">22</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Courtney Williams</td><td class="l tm">MIN</td><td class="rat">15.17</td><td>39</td><td>14.3</td><td>5.0</td><td>4.3</td></tr>
-<tr><td class="rk">23</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiki Iriafen</td><td class="l tm">WAS</td><td class="rat">15.00</td><td>37</td><td>15.3</td><td>9.5</td><td>1.6</td></tr>
-<tr><td class="rk">24</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Kamilla Cardoso</td><td class="l tm">CHI</td><td class="rat">14.88</td><td>39</td><td>14.8</td><td>8.7</td><td>2.5</td></tr>
-<tr><td class="rk">25</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Dearica Hamby</td><td class="l tm">LAS</td><td class="rat">14.49</td><td>40</td><td>14.4</td><td>7.0</td><td>2.5</td></tr>
-<tr><td class="rk">26</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Chelsea Gray</td><td class="l tm">LVA</td><td class="rat">14.37</td><td>39</td><td>12.0</td><td>3.1</td><td>6.8</td></tr>
-<tr><td class="rk">27</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Arike Ogunbowale</td><td class="l tm">DAL</td><td class="rat">13.98</td><td>40</td><td>15.2</td><td>3.1</td><td>3.2</td></tr>
-<tr><td class="rk">28</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kahleah Copper</td><td class="l tm">PHX</td><td class="rat">13.77</td><td>38</td><td>21.3</td><td>3.6</td><td>1.9</td></tr>
-<tr><td class="rk">29</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Gabby Williams</td><td class="l tm">GSV</td><td class="rat">13.43</td><td>37</td><td>14.3</td><td>3.3</td><td>2.2</td></tr>
-<tr><td class="rk">30</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Carla Leite</td><td class="l tm">POR</td><td class="rat">12.98</td><td>36</td><td>15.9</td><td>2.1</td><td>6.3</td></tr></tbody></table></section>
-<section id="rookies"><h3>Rookies</h3><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Olivia Miles</td><td class="l tm">MIN</td><td class="rat">21.19</td><td>38</td><td>19.7</td><td>4.6</td><td>6.0</td></tr>
-<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Pauline Astier</td><td class="l tm">NYL</td><td class="rat">9.94</td><td>40</td><td>9.2</td><td>2.5</td><td>3.4</td></tr>
-<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Azzi Fudd</td><td class="l tm">DAL</td><td class="rat">9.83</td><td>30</td><td>13.1</td><td>1.7</td><td>1.8</td></tr>
-<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Flau'jae Johnson</td><td class="l tm">SEA</td><td class="rat">9.79</td><td>38</td><td>14.1</td><td>4.8</td><td>2.9</td></tr>
-<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lauren Betts</td><td class="l tm">WAS</td><td class="rat">8.38</td><td>40</td><td>6.3</td><td>4.4</td><td>1.1</td></tr>
-<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Laura Juskaite</td><td class="l tm">TOR</td><td class="rat">7.85</td><td>40</td><td>10.2</td><td>4.3</td><td>1.7</td></tr>
-<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sydney Taylor</td><td class="l tm">CHI</td><td class="rat">7.38</td><td>33</td><td>13.8</td><td>1.5</td><td>1.8</td></tr>
-<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Awa Fam</td><td class="l tm">SEA</td><td class="rat">6.96</td><td>33</td><td>10.3</td><td>5.7</td><td>1.8</td></tr>
-<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiki Rice</td><td class="l tm">TOR</td><td class="rat">6.89</td><td>24</td><td>12.5</td><td>3.5</td><td>3.2</td></tr>
-<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Noemie Brochant</td><td class="l tm">PHX</td><td class="rat">6.27</td><td>39</td><td>6.2</td><td>1.9</td><td>1.7</td></tr>
-<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/nz.png" alt="" loading="lazy"></td><td class="l pl">Charlisse Leger-Walker</td><td class="l tm">CON</td><td class="rat">5.88</td><td>40</td><td>7.3</td><td>2.4</td><td>3.6</td></tr>
-<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">María Conde</td><td class="l tm">TOR</td><td class="rat">5.64</td><td>33</td><td>8.9</td><td>4.6</td><td>2.6</td></tr>
-<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cotie McMahon</td><td class="l tm">WAS</td><td class="rat">5.36</td><td>38</td><td>6.3</td><td>2.9</td><td>1.9</td></tr>
-<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Georgia Amoore</td><td class="l tm">WAS</td><td class="rat">4.82</td><td>40</td><td>6.6</td><td>1.4</td><td>3.5</td></tr>
-<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/mx.png" alt="" loading="lazy"></td><td class="l pl">Gabriela Jáquez</td><td class="l tm">CHI</td><td class="rat">4.31</td><td>35</td><td>6.5</td><td>2.9</td><td>0.9</td></tr></tbody></table></section>
-<section id="intl"><h3>International</h3><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/si.png" alt="" loading="lazy"></td><td class="l pl">Jessica Shepard</td><td class="l tm">DAL</td><td class="rat">19.94</td><td>38</td><td>14.4</td><td>11.1</td><td>4.9</td></tr>
-<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/ba.png" alt="" loading="lazy"></td><td class="l pl">Jonquel Jones</td><td class="l tm">NYL</td><td class="rat">16.51</td><td>39</td><td>14.6</td><td>9.0</td><td>2.7</td></tr>
-<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Kamilla Cardoso</td><td class="l tm">CHI</td><td class="rat">14.88</td><td>39</td><td>14.8</td><td>8.7</td><td>2.5</td></tr>
-<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Gabby Williams</td><td class="l tm">GSV</td><td class="rat">13.43</td><td>37</td><td>14.3</td><td>3.3</td><td>2.2</td></tr>
-<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Carla Leite</td><td class="l tm">POR</td><td class="rat">12.98</td><td>36</td><td>15.9</td><td>2.1</td><td>6.3</td></tr>
-<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Bridget Carleton</td><td class="l tm">POR</td><td class="rat">12.75</td><td>39</td><td>14.3</td><td>4.5</td><td>2.2</td></tr>
-<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Janelle Salaun</td><td class="l tm">GSV</td><td class="rat">12.62</td><td>38</td><td>12.9</td><td>3.9</td><td>1.2</td></tr>
-<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Megan DiLeo</td><td class="l tm">POR</td><td class="rat">11.14</td><td>38</td><td>13.2</td><td>4.2</td><td>0.9</td></tr>
-<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/mk.png" alt="" loading="lazy"></td><td class="l pl">DeWanna Bonner</td><td class="l tm">ATL</td><td class="rat">10.53</td><td>38</td><td>10.5</td><td>6.0</td><td>1.6</td></tr>
-<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/az.png" alt="" loading="lazy"></td><td class="l pl">Tiffany Hayes</td><td class="l tm">GSV</td><td class="rat">9.99</td><td>38</td><td>8.9</td><td>2.1</td><td>2.4</td></tr>
-<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Dominique Malonga</td><td class="l tm">SEA</td><td class="rat">9.96</td><td>31</td><td>17.0</td><td>9.0</td><td>1.7</td></tr>
-<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Pauline Astier</td><td class="l tm">NYL</td><td class="rat">9.94</td><td>40</td><td>9.2</td><td>2.5</td><td>3.4</td></tr>
-<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Laura Juskaite</td><td class="l tm">TOR</td><td class="rat">7.85</td><td>40</td><td>10.2</td><td>4.3</td><td>1.7</td></tr>
-<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Jade Melbourne</td><td class="l tm">SEA</td><td class="rat">7.72</td><td>39</td><td>9.5</td><td>2.2</td><td>3.9</td></tr>
-<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Marine Johannes</td><td class="l tm">NYL</td><td class="rat">7.56</td><td>37</td><td>8.5</td><td>2.1</td><td>2.4</td></tr></tbody></table></section>
-<section id="bench"><h3>Sixth Player</h3><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Janelle Salaun</td><td class="l tm">GSV</td><td class="rat">12.62</td><td>38</td><td>12.9</td><td>3.9</td><td>1.2</td></tr>
-<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/az.png" alt="" loading="lazy"></td><td class="l pl">Tiffany Hayes</td><td class="l tm">GSV</td><td class="rat">9.99</td><td>38</td><td>8.9</td><td>2.1</td><td>2.4</td></tr>
-<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lauren Betts</td><td class="l tm">WAS</td><td class="rat">8.38</td><td>40</td><td>6.3</td><td>4.4</td><td>1.1</td></tr>
-<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sophie Cunningham</td><td class="l tm">IND</td><td class="rat">8.11</td><td>39</td><td>8.3</td><td>2.3</td><td>1.3</td></tr>
-<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kaila Charles</td><td class="l tm">GSV</td><td class="rat">7.62</td><td>40</td><td>6.2</td><td>4.4</td><td>1.4</td></tr>
-<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Marine Johannes</td><td class="l tm">NYL</td><td class="rat">7.56</td><td>37</td><td>8.5</td><td>2.1</td><td>2.4</td></tr>
-<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/cn.png" alt="" loading="lazy"></td><td class="l pl">Han Xu</td><td class="l tm">NYL</td><td class="rat">7.48</td><td>40</td><td>6.4</td><td>2.6</td><td>0.7</td></tr>
-<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Kennedy Burke</td><td class="l tm">CON</td><td class="rat">7.35</td><td>37</td><td>8.8</td><td>3.2</td><td>1.4</td></tr>
-<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Makayla Timpson</td><td class="l tm">IND</td><td class="rat">6.99</td><td>39</td><td>5.5</td><td>4.9</td><td>0.5</td></tr>
-<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kaitlyn Chen</td><td class="l tm">GSV</td><td class="rat">6.64</td><td>40</td><td>6.8</td><td>1.1</td><td>1.9</td></tr>
-<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jewell Loyd</td><td class="l tm">LVA</td><td class="rat">6.33</td><td>38</td><td>7.7</td><td>2.3</td><td>1.4</td></tr>
-<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maddy Siegrist</td><td class="l tm">DAL</td><td class="rat">6.31</td><td>37</td><td>6.3</td><td>2.7</td><td>0.9</td></tr>
-<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cameron Brink</td><td class="l tm">LAS</td><td class="rat">6.17</td><td>30</td><td>9.6</td><td>5.0</td><td>1.5</td></tr>
-<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rebekah Gardner</td><td class="l tm">NYL</td><td class="rat">5.99</td><td>38</td><td>5.3</td><td>2.5</td><td>1.3</td></tr>
-<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aneesah Morrow</td><td class="l tm">TOR</td><td class="rat">5.76</td><td>27</td><td>11.0</td><td>8.3</td><td>1.4</td></tr></tbody></table></section>
-<section id="teams"><h3>By Team</h3><h4>Atlanta Dream</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rhyne Howard</td><td class="l tm">ATL</td><td class="rat">19.40</td><td>39</td><td>18.3</td><td>3.8</td><td>3.6</td></tr>
-<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Allisha Gray</td><td class="l tm">ATL</td><td class="rat">18.36</td><td>40</td><td>19.3</td><td>3.4</td><td>2.6</td></tr>
-<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Angel Reese</td><td class="l tm">ATL</td><td class="rat">18.18</td><td>39</td><td>16.1</td><td>12.4</td><td>2.8</td></tr>
-<tr><td class="rk">21</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jordin Canada</td><td class="l tm">ATL</td><td class="rat">15.41</td><td>39</td><td>11.6</td><td>3.7</td><td>7.4</td></tr>
-<tr><td class="rk">40</td><td class="fl"><img src="https://flagcdn.com/w40/mk.png" alt="" loading="lazy"></td><td class="l pl">DeWanna Bonner</td><td class="l tm">ATL</td><td class="rat">10.53</td><td>38</td><td>10.5</td><td>6.0</td><td>1.6</td></tr>
-<tr><td class="rk">47</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Naz Hillmon</td><td class="l tm">ATL</td><td class="rat">9.04</td><td>39</td><td>9.1</td><td>4.6</td><td>1.5</td></tr>
-<tr><td class="rk">108</td><td class="fl"><img src="https://flagcdn.com/w40/ke.png" alt="" loading="lazy"></td><td class="l pl">Madina Okot</td><td class="l tm">ATL</td><td class="rat">4.29</td><td>39</td><td>5.4</td><td>3.3</td><td>0.3</td></tr>
-<tr><td class="rk">114</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Isobel Borlase</td><td class="l tm">ATL</td><td class="rat">3.76</td><td>40</td><td>4.6</td><td>1.4</td><td>1.0</td></tr>
-<tr><td class="rk">137</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Brionna Jones</td><td class="l tm">ATL</td><td class="rat">2.56</td><td>9</td><td>8.2</td><td>5.6</td><td>2.0</td></tr>
-<tr><td class="rk">146</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Te-Hina Paopao</td><td class="l tm">ATL</td><td class="rat">1.96</td><td>31</td><td>3.6</td><td>0.8</td><td>1.4</td></tr>
-<tr><td class="rk">182</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jaylyn Sherrod</td><td class="l tm">ATL</td><td class="rat">0.62</td><td>10</td><td>2.3</td><td>0.9</td><td>1.1</td></tr>
-<tr><td class="rk">183</td><td class="fl"><img src="https://flagcdn.com/w40/ml.png" alt="" loading="lazy"></td><td class="l pl">Sika Kone</td><td class="l tm">ATL</td><td class="rat">0.58</td><td>32</td><td>1.7</td><td>1.0</td><td>0.2</td></tr>
-<tr><td class="rk">187</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Shatori Walker-Kimbrough</td><td class="l tm">ATL</td><td class="rat">0.49</td><td>12</td><td>1.1</td><td>0.2</td><td>0.5</td></tr>
-<tr><td class="rk">192</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Indya Nivar</td><td class="l tm">ATL</td><td class="rat">0.39</td><td>20</td><td>0.8</td><td>0.8</td><td>0.3</td></tr>
-<tr><td class="rk">197</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aaliyah Nye</td><td class="l tm">ATL</td><td class="rat">0.35</td><td>18</td><td>0.8</td><td>0.2</td><td>0.2</td></tr></tbody></table>
-<h4>Chicago Sky</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">24</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Kamilla Cardoso</td><td class="l tm">CHI</td><td class="rat">14.88</td><td>39</td><td>14.8</td><td>8.7</td><td>2.5</td></tr>
-<tr><td class="rk">35</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Natasha Cloud</td><td class="l tm">CHI</td><td class="rat">11.25</td><td>39</td><td>11.4</td><td>3.4</td><td>4.9</td></tr>
-<tr><td class="rk">62</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sydney Taylor</td><td class="l tm">CHI</td><td class="rat">7.38</td><td>33</td><td>13.8</td><td>1.5</td><td>1.8</td></tr>
-<tr><td class="rk">74</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Azura Stevens</td><td class="l tm">CHI</td><td class="rat">6.77</td><td>31</td><td>10.7</td><td>6.5</td><td>2.2</td></tr>
-<tr><td class="rk">87</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Skylar Diggins</td><td class="l tm">CHI</td><td class="rat">5.92</td><td>19</td><td>14.2</td><td>3.2</td><td>4.9</td></tr>
-<tr><td class="rk">92</td><td class="fl"><img src="https://flagcdn.com/w40/hu.png" alt="" loading="lazy"></td><td class="l pl">Courtney Vandersloot</td><td class="l tm">CHI</td><td class="rat">5.55</td><td>23</td><td>9.0</td><td>2.8</td><td>5.2</td></tr>
-<tr><td class="rk">94</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jacy Sheldon</td><td class="l tm">CHI</td><td class="rat">5.31</td><td>40</td><td>6.4</td><td>1.3</td><td>1.6</td></tr>
-<tr><td class="rk">96</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Elizabeth Williams</td><td class="l tm">CHI</td><td class="rat">5.06</td><td>40</td><td>5.0</td><td>3.4</td><td>1.3</td></tr>
-<tr><td class="rk">107</td><td class="fl"><img src="https://flagcdn.com/w40/mx.png" alt="" loading="lazy"></td><td class="l pl">Gabriela Jáquez</td><td class="l tm">CHI</td><td class="rat">4.31</td><td>35</td><td>6.5</td><td>2.9</td><td>0.9</td></tr>
-<tr><td class="rk">126</td><td class="fl"><img src="https://flagcdn.com/w40/ml.png" alt="" loading="lazy"></td><td class="l pl">Aicha Coulibaly</td><td class="l tm">CHI</td><td class="rat">3.18</td><td>28</td><td>4.8</td><td>2.8</td><td>0.6</td></tr>
-<tr><td class="rk">129</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rachel Banham</td><td class="l tm">CHI</td><td class="rat">2.83</td><td>36</td><td>4.7</td><td>1.2</td><td>1.2</td></tr>
-<tr><td class="rk">157</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rickea Jackson</td><td class="l tm">CHI</td><td class="rat">1.47</td><td>4</td><td>18.0</td><td>4.8</td><td>2.0</td></tr>
-<tr><td class="rk">161</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">DiJonai Carrington</td><td class="l tm">CHI</td><td class="rat">1.32</td><td>11</td><td>8.8</td><td>3.1</td><td>0.6</td></tr>
-<tr><td class="rk">226</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Morgan Maly</td><td class="l tm">CHI</td><td class="rat">0.00</td><td>2</td><td>0.0</td><td>0.0</td><td>0.0</td></tr></tbody></table>
-<h4>Connecticut Sun</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">58</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Olivia Nelson-Ododa</td><td class="l tm">CON</td><td class="rat">7.66</td><td>32</td><td>10.0</td><td>5.9</td><td>1.6</td></tr>
-<tr><td class="rk">63</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Kennedy Burke</td><td class="l tm">CON</td><td class="rat">7.35</td><td>37</td><td>8.8</td><td>3.2</td><td>1.4</td></tr>
-<tr><td class="rk">76</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Leila Lacan</td><td class="l tm">CON</td><td class="rat">6.65</td><td>27</td><td>11.6</td><td>1.9</td><td>4.6</td></tr>
-<tr><td class="rk">84</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Aaliyah Edwards</td><td class="l tm">CON</td><td class="rat">6.12</td><td>26</td><td>11.1</td><td>4.4</td><td>0.9</td></tr>
-<tr><td class="rk">88</td><td class="fl"><img src="https://flagcdn.com/w40/nz.png" alt="" loading="lazy"></td><td class="l pl">Charlisse Leger-Walker</td><td class="l tm">CON</td><td class="rat">5.88</td><td>40</td><td>7.3</td><td>2.4</td><td>3.6</td></tr>
-<tr><td class="rk">89</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Brittney Griner</td><td class="l tm">CON</td><td class="rat">5.81</td><td>18</td><td>13.2</td><td>5.8</td><td>2.5</td></tr>
-<tr><td class="rk">95</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Diamond Miller</td><td class="l tm">CON</td><td class="rat">5.18</td><td>40</td><td>9.6</td><td>2.6</td><td>1.4</td></tr>
-<tr><td class="rk">101</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Saniya Rivers</td><td class="l tm">CON</td><td class="rat">4.67</td><td>36</td><td>7.1</td><td>2.4</td><td>3.2</td></tr>
-<tr><td class="rk">134</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Nell Angloma</td><td class="l tm">CON</td><td class="rat">2.64</td><td>36</td><td>4.2</td><td>1.8</td><td>0.8</td></tr>
-<tr><td class="rk">136</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Raegan Beers</td><td class="l tm">CON</td><td class="rat">2.60</td><td>34</td><td>3.7</td><td>3.1</td><td>0.8</td></tr>
-<tr><td class="rk">151</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Hailey Van Lith</td><td class="l tm">CON</td><td class="rat">1.77</td><td>19</td><td>5.5</td><td>1.3</td><td>1.8</td></tr>
-<tr><td class="rk">162</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Gianna Kneepkens</td><td class="l tm">CON</td><td class="rat">1.30</td><td>32</td><td>3.0</td><td>1.2</td><td>0.4</td></tr>
-<tr><td class="rk">188</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ashlon Jackson</td><td class="l tm">CON</td><td class="rat">0.48</td><td>15</td><td>2.1</td><td>0.9</td><td>0.6</td></tr>
-<tr><td class="rk">215</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rayah Marshall</td><td class="l tm">CON</td><td class="rat">0.08</td><td>4</td><td>2.0</td><td>1.5</td><td>0.2</td></tr></tbody></table>
-<h4>Dallas Wings</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Paige Bueckers</td><td class="l tm">DAL</td><td class="rat">20.93</td><td>38</td><td>20.5</td><td>4.1</td><td>5.9</td></tr>
-<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/si.png" alt="" loading="lazy"></td><td class="l pl">Jessica Shepard</td><td class="l tm">DAL</td><td class="rat">19.94</td><td>38</td><td>14.4</td><td>11.1</td><td>4.9</td></tr>
-<tr><td class="rk">27</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Arike Ogunbowale</td><td class="l tm">DAL</td><td class="rat">13.98</td><td>40</td><td>15.2</td><td>3.1</td><td>3.2</td></tr>
-<tr><td class="rk">44</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Azzi Fudd</td><td class="l tm">DAL</td><td class="rat">9.83</td><td>30</td><td>13.1</td><td>1.7</td><td>1.8</td></tr>
-<tr><td class="rk">69</td><td class="fl"><img src="https://flagcdn.com/w40/fi.png" alt="" loading="lazy"></td><td class="l pl">Awak Kuier</td><td class="l tm">DAL</td><td class="rat">7.03</td><td>37</td><td>5.9</td><td>3.8</td><td>1.0</td></tr>
-<tr><td class="rk">81</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maddy Siegrist</td><td class="l tm">DAL</td><td class="rat">6.31</td><td>37</td><td>6.3</td><td>2.7</td><td>0.9</td></tr>
-<tr><td class="rk">97</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aziaha James</td><td class="l tm">DAL</td><td class="rat">4.91</td><td>35</td><td>6.1</td><td>2.4</td><td>1.2</td></tr>
-<tr><td class="rk">102</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Alanna Smith</td><td class="l tm">DAL</td><td class="rat">4.56</td><td>32</td><td>6.0</td><td>3.9</td><td>1.0</td></tr>
-<tr><td class="rk">128</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Odyssey Sims</td><td class="l tm">DAL</td><td class="rat">2.90</td><td>31</td><td>4.8</td><td>0.9</td><td>2.0</td></tr>
-<tr><td class="rk">139</td><td class="fl"><img src="https://flagcdn.com/w40/cn.png" alt="" loading="lazy"></td><td class="l pl">Li Yueru</td><td class="l tm">DAL</td><td class="rat">2.48</td><td>29</td><td>3.3</td><td>2.6</td><td>0.4</td></tr>
-<tr><td class="rk">144</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sug Sutton</td><td class="l tm">DAL</td><td class="rat">2.11</td><td>25</td><td>3.4</td><td>0.8</td><td>2.0</td></tr>
-<tr><td class="rk">156</td><td class="fl"><img src="https://flagcdn.com/w40/il.png" alt="" loading="lazy"></td><td class="l pl">Alysha Clark</td><td class="l tm">DAL</td><td class="rat">1.50</td><td>27</td><td>2.4</td><td>1.7</td><td>0.7</td></tr>
-<tr><td class="rk">185</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Haley Jones</td><td class="l tm">DAL</td><td class="rat">0.53</td><td>8</td><td>3.8</td><td>1.5</td><td>0.6</td></tr>
-<tr><td class="rk">211</td><td class="fl"><img src="https://flagcdn.com/w40/it.png" alt="" loading="lazy"></td><td class="l pl">Costanza Verona</td><td class="l tm">DAL</td><td class="rat">0.11</td><td>1</td><td>4.0</td><td>0.0</td><td>2.0</td></tr>
-<tr><td class="rk">213</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">JJ Quinerly</td><td class="l tm">DAL</td><td class="rat">0.09</td><td>2</td><td>1.0</td><td>0.5</td><td>1.0</td></tr>
-<tr><td class="rk">228</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Christyn Williams</td><td class="l tm">DAL</td><td class="rat">-0.02</td><td>1</td><td>1.0</td><td>1.0</td><td>0.0</td></tr></tbody></table>
-<h4>Golden State Valkyries</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Veronica Burton</td><td class="l tm">GSV</td><td class="rat">18.35</td><td>40</td><td>12.3</td><td>3.5</td><td>5.8</td></tr>
-<tr><td class="rk">29</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Gabby Williams</td><td class="l tm">GSV</td><td class="rat">13.43</td><td>37</td><td>14.3</td><td>3.3</td><td>2.2</td></tr>
-<tr><td class="rk">33</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Janelle Salaun</td><td class="l tm">GSV</td><td class="rat">12.62</td><td>38</td><td>12.9</td><td>3.9</td><td>1.2</td></tr>
-<tr><td class="rk">41</td><td class="fl"><img src="https://flagcdn.com/w40/az.png" alt="" loading="lazy"></td><td class="l pl">Tiffany Hayes</td><td class="l tm">GSV</td><td class="rat">9.99</td><td>38</td><td>8.9</td><td>2.1</td><td>2.4</td></tr>
-<tr><td class="rk">49</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kayla Thornton</td><td class="l tm">GSV</td><td class="rat">8.64</td><td>40</td><td>7.8</td><td>4.5</td><td>0.7</td></tr>
-<tr><td class="rk">59</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kaila Charles</td><td class="l tm">GSV</td><td class="rat">7.62</td><td>40</td><td>6.2</td><td>4.4</td><td>1.4</td></tr>
-<tr><td class="rk">64</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiah Stokes</td><td class="l tm">GSV</td><td class="rat">7.19</td><td>39</td><td>3.6</td><td>5.4</td><td>1.2</td></tr>
-<tr><td class="rk">77</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kaitlyn Chen</td><td class="l tm">GSV</td><td class="rat">6.64</td><td>40</td><td>6.8</td><td>1.1</td><td>1.9</td></tr>
-<tr><td class="rk">78</td><td class="fl"><img src="https://flagcdn.com/w40/it.png" alt="" loading="lazy"></td><td class="l pl">Cecilia Zandalasini</td><td class="l tm">GSV</td><td class="rat">6.58</td><td>35</td><td>8.8</td><td>2.2</td><td>1.8</td></tr>
-<tr><td class="rk">112</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Laeticia Amihere</td><td class="l tm">GSV</td><td class="rat">4.06</td><td>35</td><td>3.4</td><td>3.1</td><td>1.0</td></tr>
-<tr><td class="rk">190</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Nadia Fingall</td><td class="l tm">GSV</td><td class="rat">0.42</td><td>9</td><td>1.2</td><td>0.6</td><td>0.2</td></tr>
-<tr><td class="rk">195</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Juste Jocyte</td><td class="l tm">GSV</td><td class="rat">0.36</td><td>14</td><td>2.1</td><td>0.5</td><td>0.9</td></tr>
-<tr><td class="rk">207</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ashten Prechtel</td><td class="l tm">GSV</td><td class="rat">0.18</td><td>5</td><td>2.2</td><td>2.0</td><td>0.6</td></tr>
-<tr><td class="rk">221</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ndjakalenga Mwenentanda</td><td class="l tm">GSV</td><td class="rat">0.02</td><td>4</td><td>0.0</td><td>0.5</td><td>0.5</td></tr>
-<tr><td class="rk">231</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Miela Sowah</td><td class="l tm">GSV</td><td class="rat">-0.19</td><td>6</td><td>0.3</td><td>0.8</td><td>0.0</td></tr></tbody></table>
-<h4>Indiana Fever</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kelsey Mitchell</td><td class="l tm">IND</td><td class="rat">22.43</td><td>40</td><td>25.0</td><td>1.7</td><td>2.8</td></tr>
-<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Caitlin Clark</td><td class="l tm">IND</td><td class="rat">19.59</td><td>36</td><td>22.5</td><td>3.9</td><td>8.3</td></tr>
-<tr><td class="rk">16</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aliyah Boston</td><td class="l tm">IND</td><td class="rat">17.07</td><td>36</td><td>16.9</td><td>8.2</td><td>3.0</td></tr>
-<tr><td class="rk">50</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Monique Billings</td><td class="l tm">IND</td><td class="rat">8.51</td><td>39</td><td>6.8</td><td>4.8</td><td>1.0</td></tr>
-<tr><td class="rk">54</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sophie Cunningham</td><td class="l tm">IND</td><td class="rat">8.11</td><td>39</td><td>8.3</td><td>2.3</td><td>1.3</td></tr>
-<tr><td class="rk">70</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Makayla Timpson</td><td class="l tm">IND</td><td class="rat">6.99</td><td>39</td><td>5.5</td><td>4.9</td><td>0.5</td></tr>
-<tr><td class="rk">98</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lexie Hull</td><td class="l tm">IND</td><td class="rat">4.85</td><td>40</td><td>5.4</td><td>3.1</td><td>0.7</td></tr>
-<tr><td class="rk">103</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Tyasha Harris</td><td class="l tm">IND</td><td class="rat">4.42</td><td>35</td><td>4.2</td><td>1.1</td><td>2.0</td></tr>
-<tr><td class="rk">120</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Myisha Hines-Allen</td><td class="l tm">IND</td><td class="rat">3.34</td><td>34</td><td>3.6</td><td>3.2</td><td>1.5</td></tr>
-<tr><td class="rk">143</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Raven Johnson</td><td class="l tm">IND</td><td class="rat">2.13</td><td>35</td><td>3.1</td><td>1.7</td><td>1.2</td></tr>
-<tr><td class="rk">178</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Grace VanSlooten</td><td class="l tm">IND</td><td class="rat">0.70</td><td>18</td><td>1.4</td><td>0.6</td><td>0.2</td></tr>
-<tr><td class="rk">191</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Damiris Dantas</td><td class="l tm">IND</td><td class="rat">0.41</td><td>12</td><td>3.3</td><td>1.5</td><td>0.3</td></tr>
-<tr><td class="rk">201</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Mercedes Russell</td><td class="l tm">IND</td><td class="rat">0.25</td><td>5</td><td>1.6</td><td>0.8</td><td>0.8</td></tr>
-<tr><td class="rk">208</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Bree Hall</td><td class="l tm">IND</td><td class="rat">0.17</td><td>4</td><td>2.0</td><td>0.2</td><td>0.0</td></tr>
-<tr><td class="rk">225</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ugonne Onyiah</td><td class="l tm">IND</td><td class="rat">0.00</td><td>1</td><td>0.0</td><td>0.0</td><td>0.0</td></tr></tbody></table>
-<h4>Los Angeles Sparks</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">17</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Nneka Ogwumike</td><td class="l tm">LAS</td><td class="rat">16.93</td><td>39</td><td>17.2</td><td>8.9</td><td>3.0</td></tr>
-<tr><td class="rk">25</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Dearica Hamby</td><td class="l tm">LAS</td><td class="rat">14.49</td><td>40</td><td>14.4</td><td>7.0</td><td>2.5</td></tr>
-<tr><td class="rk">39</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rae Burrell</td><td class="l tm">LAS</td><td class="rat">10.80</td><td>39</td><td>14.6</td><td>2.4</td><td>2.6</td></tr>
-<tr><td class="rk">55</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Erica Wheeler</td><td class="l tm">LAS</td><td class="rat">8.09</td><td>39</td><td>9.0</td><td>1.9</td><td>5.2</td></tr>
-<tr><td class="rk">68</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ariel Atkins</td><td class="l tm">LAS</td><td class="rat">7.06</td><td>38</td><td>8.5</td><td>2.9</td><td>2.9</td></tr>
-<tr><td class="rk">83</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cameron Brink</td><td class="l tm">LAS</td><td class="rat">6.17</td><td>30</td><td>9.6</td><td>5.0</td><td>1.5</td></tr>
-<tr><td class="rk">113</td><td class="fl"><img src="https://flagcdn.com/w40/cm.png" alt="" loading="lazy"></td><td class="l pl">Monique Akoa-Makani</td><td class="l tm">LAS</td><td class="rat">4.04</td><td>26</td><td>8.1</td><td>1.8</td><td>2.3</td></tr>
-<tr><td class="rk">145</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Chance Gray</td><td class="l tm">LAS</td><td class="rat">1.97</td><td>37</td><td>2.9</td><td>1.1</td><td>1.0</td></tr>
-<tr><td class="rk">160</td><td class="fl"><img src="https://flagcdn.com/w40/kr.png" alt="" loading="lazy"></td><td class="l pl">Jihyun Park</td><td class="l tm">LAS</td><td class="rat">1.39</td><td>33</td><td>2.2</td><td>1.0</td><td>0.5</td></tr>
-<tr><td class="rk">170</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Emma Cannon</td><td class="l tm">LAS</td><td class="rat">0.88</td><td>16</td><td>3.8</td><td>1.4</td><td>0.3</td></tr>
-<tr><td class="rk">175</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Tonie Morgan</td><td class="l tm">LAS</td><td class="rat">0.73</td><td>8</td><td>4.5</td><td>1.1</td><td>2.2</td></tr>
-<tr><td class="rk">177</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kate Martin</td><td class="l tm">LAS</td><td class="rat">0.72</td><td>17</td><td>2.3</td><td>1.1</td><td>0.4</td></tr>
-<tr><td class="rk">205</td><td class="fl"><img src="https://flagcdn.com/w40/dk.png" alt="" loading="lazy"></td><td class="l pl">Laura Ziegler</td><td class="l tm">LAS</td><td class="rat">0.20</td><td>3</td><td>2.7</td><td>1.3</td><td>1.0</td></tr>
-<tr><td class="rk">209</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Alissa Pili</td><td class="l tm">LAS</td><td class="rat">0.16</td><td>5</td><td>2.0</td><td>2.2</td><td>0.8</td></tr>
-<tr><td class="rk">227</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sania Feagin</td><td class="l tm">LAS</td><td class="rat">-0.00</td><td>3</td><td>0.0</td><td>0.3</td><td>0.7</td></tr></tbody></table>
-<h4>Las Vegas Aces</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">A'ja Wilson</td><td class="l tm">LVA</td><td class="rat">28.31</td><td>37</td><td>26.0</td><td>9.4</td><td>3.2</td></tr>
-<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jackie Young</td><td class="l tm">LVA</td><td class="rat">22.07</td><td>39</td><td>18.9</td><td>4.5</td><td>6.6</td></tr>
-<tr><td class="rk">26</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Chelsea Gray</td><td class="l tm">LVA</td><td class="rat">14.37</td><td>39</td><td>12.0</td><td>3.1</td><td>6.8</td></tr>
-<tr><td class="rk">32</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">NaLyssa Smith</td><td class="l tm">LVA</td><td class="rat">12.65</td><td>38</td><td>11.7</td><td>6.4</td><td>0.9</td></tr>
-<tr><td class="rk">80</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jewell Loyd</td><td class="l tm">LVA</td><td class="rat">6.33</td><td>38</td><td>7.7</td><td>2.3</td><td>1.4</td></tr>
-<tr><td class="rk">106</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cheyenne Parker-Tyus</td><td class="l tm">LVA</td><td class="rat">4.33</td><td>27</td><td>5.3</td><td>2.8</td><td>0.6</td></tr>
-<tr><td class="rk">110</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Stephanie Talbot</td><td class="l tm">LVA</td><td class="rat">4.26</td><td>40</td><td>3.4</td><td>2.5</td><td>1.0</td></tr>
-<tr><td class="rk">115</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Chennedy Carter</td><td class="l tm">LVA</td><td class="rat">3.75</td><td>13</td><td>12.2</td><td>1.8</td><td>1.3</td></tr>
-<tr><td class="rk">150</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Brianna Turner</td><td class="l tm">LVA</td><td class="rat">1.78</td><td>37</td><td>1.7</td><td>2.3</td><td>0.2</td></tr>
-<tr><td class="rk">152</td><td class="fl"><img src="https://flagcdn.com/w40/jp.png" alt="" loading="lazy"></td><td class="l pl">Mai Yamamoto</td><td class="l tm">LVA</td><td class="rat">1.63</td><td>10</td><td>5.8</td><td>0.9</td><td>1.8</td></tr>
-<tr><td class="rk">166</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kierstan Bell</td><td class="l tm">LVA</td><td class="rat">1.07</td><td>26</td><td>2.0</td><td>1.5</td><td>0.6</td></tr>
-<tr><td class="rk">173</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Justine Pissott</td><td class="l tm">LVA</td><td class="rat">0.76</td><td>9</td><td>4.4</td><td>1.1</td><td>0.3</td></tr>
-<tr><td class="rk">176</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ta'Niya Latson</td><td class="l tm">LVA</td><td class="rat">0.72</td><td>17</td><td>2.8</td><td>0.9</td><td>0.4</td></tr>
-<tr><td class="rk">194</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Dana Evans</td><td class="l tm">LVA</td><td class="rat">0.36</td><td>11</td><td>3.5</td><td>1.6</td><td>2.1</td></tr></tbody></table>
-<h4>Minnesota Lynx</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Olivia Miles</td><td class="l tm">MIN</td><td class="rat">21.19</td><td>38</td><td>19.7</td><td>4.6</td><td>6.0</td></tr>
-<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Natasha Howard</td><td class="l tm">MIN</td><td class="rat">19.99</td><td>40</td><td>14.9</td><td>7.7</td><td>3.4</td></tr>
-<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kayla McBride</td><td class="l tm">MIN</td><td class="rat">19.71</td><td>40</td><td>18.1</td><td>3.1</td><td>2.1</td></tr>
-<tr><td class="rk">22</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Courtney Williams</td><td class="l tm">MIN</td><td class="rat">15.17</td><td>39</td><td>14.3</td><td>5.0</td><td>4.3</td></tr>
-<tr><td class="rk">46</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Nia Coffey</td><td class="l tm">MIN</td><td class="rat">9.40</td><td>40</td><td>6.4</td><td>4.4</td><td>1.8</td></tr>
-<tr><td class="rk">79</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Napheesa Collier</td><td class="l tm">MIN</td><td class="rat">6.37</td><td>12</td><td>18.0</td><td>7.3</td><td>2.8</td></tr>
-<tr><td class="rk">105</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maya Caldwell</td><td class="l tm">MIN</td><td class="rat">4.34</td><td>40</td><td>4.0</td><td>2.1</td><td>1.0</td></tr>
-<tr><td class="rk">116</td><td class="fl"><img src="https://flagcdn.com/w40/ru.png" alt="" loading="lazy"></td><td class="l pl">Anastasiia Olairi Kosu</td><td class="l tm">MIN</td><td class="rat">3.59</td><td>30</td><td>3.6</td><td>2.0</td><td>0.7</td></tr>
-<tr><td class="rk">125</td><td class="fl"><img src="https://flagcdn.com/w40/be.png" alt="" loading="lazy"></td><td class="l pl">Antonia Delaere</td><td class="l tm">MIN</td><td class="rat">3.19</td><td>37</td><td>2.9</td><td>0.7</td><td>1.1</td></tr>
-<tr><td class="rk">141</td><td class="fl"><img src="https://flagcdn.com/w40/hu.png" alt="" loading="lazy"></td><td class="l pl">Dorka Juhasz</td><td class="l tm">MIN</td><td class="rat">2.21</td><td>17</td><td>3.8</td><td>2.6</td><td>1.2</td></tr>
-<tr><td class="rk">164</td><td class="fl"><img src="https://flagcdn.com/w40/cz.png" alt="" loading="lazy"></td><td class="l pl">Eliska Joklova</td><td class="l tm">MIN</td><td class="rat">1.21</td><td>21</td><td>1.7</td><td>1.0</td><td>1.1</td></tr>
-<tr><td class="rk">180</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Liatu King</td><td class="l tm">MIN</td><td class="rat">0.66</td><td>9</td><td>2.9</td><td>2.6</td><td>0.0</td></tr>
-<tr><td class="rk">186</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Chloe Bibby</td><td class="l tm">MIN</td><td class="rat">0.50</td><td>7</td><td>4.1</td><td>0.6</td><td>0.9</td></tr>
-<tr><td class="rk">189</td><td class="fl"><img src="https://flagcdn.com/w40/cz.png" alt="" loading="lazy"></td><td class="l pl">Emma Cechova</td><td class="l tm">MIN</td><td class="rat">0.45</td><td>3</td><td>8.3</td><td>3.7</td><td>0.0</td></tr>
-<tr><td class="rk">203</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Teaira McCowan</td><td class="l tm">MIN</td><td class="rat">0.24</td><td>10</td><td>1.4</td><td>2.4</td><td>0.3</td></tr>
-<tr><td class="rk">223</td><td class="fl"><img src="https://flagcdn.com/w40/nl.png" alt="" loading="lazy"></td><td class="l pl">Emese Hof</td><td class="l tm">MIN</td><td class="rat">0.01</td><td>3</td><td>2.3</td><td>1.7</td><td>0.7</td></tr></tbody></table>
-<h4>New York Liberty</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Breanna Stewart</td><td class="l tm">NYL</td><td class="rat">21.60</td><td>39</td><td>20.4</td><td>8.1</td><td>3.2</td></tr>
-<tr><td class="rk">19</td><td class="fl"><img src="https://flagcdn.com/w40/ba.png" alt="" loading="lazy"></td><td class="l pl">Jonquel Jones</td><td class="l tm">NYL</td><td class="rat">16.51</td><td>39</td><td>14.6</td><td>9.0</td><td>2.7</td></tr>
-<tr><td class="rk">43</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Pauline Astier</td><td class="l tm">NYL</td><td class="rat">9.94</td><td>40</td><td>9.2</td><td>2.5</td><td>3.4</td></tr>
-<tr><td class="rk">48</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sabrina Ionescu</td><td class="l tm">NYL</td><td class="rat">8.82</td><td>27</td><td>15.1</td><td>4.0</td><td>4.7</td></tr>
-<tr><td class="rk">60</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Marine Johannes</td><td class="l tm">NYL</td><td class="rat">7.56</td><td>37</td><td>8.5</td><td>2.1</td><td>2.4</td></tr>
-<tr><td class="rk">61</td><td class="fl"><img src="https://flagcdn.com/w40/cn.png" alt="" loading="lazy"></td><td class="l pl">Han Xu</td><td class="l tm">NYL</td><td class="rat">7.48</td><td>40</td><td>6.4</td><td>2.6</td><td>0.7</td></tr>
-<tr><td class="rk">86</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rebekah Gardner</td><td class="l tm">NYL</td><td class="rat">5.99</td><td>38</td><td>5.3</td><td>2.5</td><td>1.3</td></tr>
-<tr><td class="rk">104</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Leonie Fiebich</td><td class="l tm">NYL</td><td class="rat">4.35</td><td>17</td><td>10.2</td><td>3.0</td><td>2.0</td></tr>
-<tr><td class="rk">122</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Rebecca Allen</td><td class="l tm">NYL</td><td class="rat">3.31</td><td>25</td><td>5.7</td><td>2.5</td><td>0.7</td></tr>
-<tr><td class="rk">132</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Satou Sabally</td><td class="l tm">NYL</td><td class="rat">2.68</td><td>13</td><td>10.4</td><td>2.8</td><td>1.9</td></tr>
-<tr><td class="rk">153</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Marine Fauthoux</td><td class="l tm">NYL</td><td class="rat">1.60</td><td>18</td><td>3.8</td><td>2.1</td><td>1.9</td></tr>
-<tr><td class="rk">168</td><td class="fl"><img src="https://flagcdn.com/w40/be.png" alt="" loading="lazy"></td><td class="l pl">Julie Vanloo</td><td class="l tm">NYL</td><td class="rat">0.97</td><td>5</td><td>5.8</td><td>2.0</td><td>5.4</td></tr>
-<tr><td class="rk">172</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Raquel Carrera</td><td class="l tm">NYL</td><td class="rat">0.81</td><td>22</td><td>1.4</td><td>1.1</td><td>0.3</td></tr>
-<tr><td class="rk">214</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Alexandra Fowler</td><td class="l tm">NYL</td><td class="rat">0.08</td><td>2</td><td>6.0</td><td>0.0</td><td>0.5</td></tr>
-<tr><td class="rk">222</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aubrey Griffin</td><td class="l tm">NYL</td><td class="rat">0.02</td><td>4</td><td>0.5</td><td>0.2</td><td>0.0</td></tr>
-<tr><td class="rk">224</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Anneli Maley</td><td class="l tm">NYL</td><td class="rat">0.01</td><td>9</td><td>0.7</td><td>1.2</td><td>0.2</td></tr></tbody></table>
-<h4>Phoenix Mercury</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">20</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Alyssa Thomas</td><td class="l tm">PHX</td><td class="rat">15.98</td><td>38</td><td>14.2</td><td>7.7</td><td>8.4</td></tr>
-<tr><td class="rk">28</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kahleah Copper</td><td class="l tm">PHX</td><td class="rat">13.77</td><td>38</td><td>21.3</td><td>3.6</td><td>1.9</td></tr>
-<tr><td class="rk">51</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Natasha Mack</td><td class="l tm">PHX</td><td class="rat">8.50</td><td>32</td><td>8.4</td><td>6.8</td><td>1.2</td></tr>
-<tr><td class="rk">53</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kelsey Plum</td><td class="l tm">PHX</td><td class="rat">8.28</td><td>17</td><td>21.5</td><td>2.1</td><td>5.4</td></tr>
-<tr><td class="rk">82</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Noemie Brochant</td><td class="l tm">PHX</td><td class="rat">6.27</td><td>39</td><td>6.2</td><td>1.9</td><td>1.7</td></tr>
-<tr><td class="rk">99</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Valeriane Ayayi</td><td class="l tm">PHX</td><td class="rat">4.83</td><td>33</td><td>6.3</td><td>2.7</td><td>1.3</td></tr>
-<tr><td class="rk">117</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lexi Held</td><td class="l tm">PHX</td><td class="rat">3.55</td><td>38</td><td>4.9</td><td>1.1</td><td>1.3</td></tr>
-<tr><td class="rk">124</td><td class="fl"><img src="https://flagcdn.com/w40/rs.png" alt="" loading="lazy"></td><td class="l pl">Jovana Nogic</td><td class="l tm">PHX</td><td class="rat">3.22</td><td>16</td><td>10.4</td><td>1.1</td><td>1.6</td></tr>
-<tr><td class="rk">155</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Sami Whitcomb</td><td class="l tm">PHX</td><td class="rat">1.57</td><td>17</td><td>5.1</td><td>1.7</td><td>2.0</td></tr>
-<tr><td class="rk">165</td><td class="fl"><img src="https://flagcdn.com/w40/be.png" alt="" loading="lazy"></td><td class="l pl">Kyara Linskens</td><td class="l tm">PHX</td><td class="rat">1.21</td><td>19</td><td>3.0</td><td>2.4</td><td>0.6</td></tr>
-<tr><td class="rk">171</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Marta Suárez</td><td class="l tm">PHX</td><td class="rat">0.86</td><td>15</td><td>3.9</td><td>1.3</td><td>0.4</td></tr>
-<tr><td class="rk">179</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Shay Ciezki</td><td class="l tm">PHX</td><td class="rat">0.68</td><td>4</td><td>6.2</td><td>1.8</td><td>1.8</td></tr>
-<tr><td class="rk">198</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Maddy Westbeld</td><td class="l tm">PHX</td><td class="rat">0.34</td><td>6</td><td>2.8</td><td>2.0</td><td>0.8</td></tr>
-<tr><td class="rk">202</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sha Carter</td><td class="l tm">PHX</td><td class="rat">0.25</td><td>13</td><td>1.2</td><td>0.7</td><td>0.5</td></tr>
-<tr><td class="rk">204</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kara Dunn</td><td class="l tm">PHX</td><td class="rat">0.21</td><td>1</td><td>9.0</td><td>2.0</td><td>1.0</td></tr>
-<tr><td class="rk">218</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Peyton Williams</td><td class="l tm">PHX</td><td class="rat">0.05</td><td>1</td><td>0.0</td><td>0.0</td><td>2.0</td></tr>
-<tr><td class="rk">230</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Saylor Poffenbarger</td><td class="l tm">PHX</td><td class="rat">-0.08</td><td>6</td><td>0.0</td><td>1.3</td><td>0.2</td></tr></tbody></table>
-<h4>Portland Fire</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">30</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Carla Leite</td><td class="l tm">POR</td><td class="rat">12.98</td><td>36</td><td>15.9</td><td>2.1</td><td>6.3</td></tr>
-<tr><td class="rk">31</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Bridget Carleton</td><td class="l tm">POR</td><td class="rat">12.75</td><td>39</td><td>14.3</td><td>4.5</td><td>2.2</td></tr>
-<tr><td class="rk">36</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Megan DiLeo</td><td class="l tm">POR</td><td class="rat">11.14</td><td>38</td><td>13.2</td><td>4.2</td><td>0.9</td></tr>
-<tr><td class="rk">38</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Emily Engstler</td><td class="l tm">POR</td><td class="rat">10.86</td><td>40</td><td>10.0</td><td>5.5</td><td>2.1</td></tr>
-<tr><td class="rk">85</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sarah Ashlee Barker</td><td class="l tm">POR</td><td class="rat">6.06</td><td>26</td><td>10.7</td><td>4.5</td><td>2.4</td></tr>
-<tr><td class="rk">109</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Frieda Buhner</td><td class="l tm">POR</td><td class="rat">4.26</td><td>35</td><td>6.3</td><td>2.2</td><td>0.7</td></tr>
-<tr><td class="rk">119</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Serah Williams</td><td class="l tm">POR</td><td class="rat">3.40</td><td>35</td><td>4.3</td><td>2.6</td><td>0.5</td></tr>
-<tr><td class="rk">131</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Nyadiew Puoch</td><td class="l tm">POR</td><td class="rat">2.75</td><td>39</td><td>3.9</td><td>2.0</td><td>0.7</td></tr>
-<tr><td class="rk">133</td><td class="fl"><img src="https://flagcdn.com/w40/gb.png" alt="" loading="lazy"></td><td class="l pl">Karlie Samuelson</td><td class="l tm">POR</td><td class="rat">2.66</td><td>28</td><td>4.5</td><td>1.5</td><td>0.8</td></tr>
-<tr><td class="rk">135</td><td class="fl"><img src="https://flagcdn.com/w40/si.png" alt="" loading="lazy"></td><td class="l pl">Teja Oblak</td><td class="l tm">POR</td><td class="rat">2.62</td><td>29</td><td>5.6</td><td>1.6</td><td>3.2</td></tr>
-<tr><td class="rk">140</td><td class="fl"><img src="https://flagcdn.com/w40/gb.png" alt="" loading="lazy"></td><td class="l pl">Holly Winterburn</td><td class="l tm">POR</td><td class="rat">2.31</td><td>27</td><td>3.3</td><td>1.3</td><td>1.8</td></tr>
-<tr><td class="rk">154</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jordan Harrison</td><td class="l tm">POR</td><td class="rat">1.60</td><td>12</td><td>5.2</td><td>1.8</td><td>3.5</td></tr>
-<tr><td class="rk">158</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Luisa Geiselsoder</td><td class="l tm">POR</td><td class="rat">1.46</td><td>21</td><td>4.5</td><td>2.6</td><td>1.3</td></tr>
-<tr><td class="rk">196</td><td class="fl"><img src="https://flagcdn.com/w40/ba.png" alt="" loading="lazy"></td><td class="l pl">Kamiah Smalls</td><td class="l tm">POR</td><td class="rat">0.36</td><td>2</td><td>7.5</td><td>0.0</td><td>3.0</td></tr>
-<tr><td class="rk">199</td><td class="fl"><img src="https://flagcdn.com/w40/ng.png" alt="" loading="lazy"></td><td class="l pl">Amy Okonkwo</td><td class="l tm">POR</td><td class="rat">0.30</td><td>4</td><td>4.2</td><td>1.0</td><td>0.2</td></tr></tbody></table>
-<h4>Seattle Storm</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">37</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Natisha Hiedeman</td><td class="l tm">SEA</td><td class="rat">11.01</td><td>36</td><td>15.4</td><td>2.7</td><td>4.8</td></tr>
-<tr><td class="rk">42</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Dominique Malonga</td><td class="l tm">SEA</td><td class="rat">9.96</td><td>31</td><td>17.0</td><td>9.0</td><td>1.7</td></tr>
-<tr><td class="rk">45</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Flau'jae Johnson</td><td class="l tm">SEA</td><td class="rat">9.79</td><td>38</td><td>14.1</td><td>4.8</td><td>2.9</td></tr>
-<tr><td class="rk">57</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Jade Melbourne</td><td class="l tm">SEA</td><td class="rat">7.72</td><td>39</td><td>9.5</td><td>2.2</td><td>3.9</td></tr>
-<tr><td class="rk">71</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Awa Fam</td><td class="l tm">SEA</td><td class="rat">6.96</td><td>33</td><td>10.3</td><td>5.7</td><td>1.8</td></tr>
-<tr><td class="rk">111</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Zia Cooke</td><td class="l tm">SEA</td><td class="rat">4.21</td><td>40</td><td>7.6</td><td>1.7</td><td>1.1</td></tr>
-<tr><td class="rk">118</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jordan Horston</td><td class="l tm">SEA</td><td class="rat">3.55</td><td>35</td><td>4.7</td><td>3.6</td><td>1.3</td></tr>
-<tr><td class="rk">123</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Katie Lou Samuelson</td><td class="l tm">SEA</td><td class="rat">3.28</td><td>32</td><td>4.4</td><td>2.1</td><td>0.8</td></tr>
-<tr><td class="rk">127</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Stefanie Dolson</td><td class="l tm">SEA</td><td class="rat">2.96</td><td>40</td><td>3.2</td><td>2.4</td><td>1.2</td></tr>
-<tr><td class="rk">147</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Mackenzie Holmes</td><td class="l tm">SEA</td><td class="rat">1.96</td><td>25</td><td>2.6</td><td>2.9</td><td>0.5</td></tr>
-<tr><td class="rk">149</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Ezi Magbegor</td><td class="l tm">SEA</td><td class="rat">1.80</td><td>14</td><td>6.9</td><td>4.0</td><td>1.8</td></tr>
-<tr><td class="rk">167</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lexie Brown</td><td class="l tm">SEA</td><td class="rat">0.98</td><td>10</td><td>3.8</td><td>1.3</td><td>1.1</td></tr>
-<tr><td class="rk">184</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Taylor Thierry</td><td class="l tm">SEA</td><td class="rat">0.54</td><td>13</td><td>1.0</td><td>1.4</td><td>0.3</td></tr>
-<tr><td class="rk">216</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Joyner Holmes</td><td class="l tm">SEA</td><td class="rat">0.07</td><td>1</td><td>2.0</td><td>5.0</td><td>1.0</td></tr>
-<tr><td class="rk">217</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Taina Mair</td><td class="l tm">SEA</td><td class="rat">0.05</td><td>9</td><td>1.4</td><td>0.4</td><td>0.4</td></tr></tbody></table>
-<h4>Toronto Tempo</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">34</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Marina Mabrey</td><td class="l tm">TOR</td><td class="rat">12.59</td><td>32</td><td>20.8</td><td>3.3</td><td>3.7</td></tr>
-<tr><td class="rk">56</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Laura Juskaite</td><td class="l tm">TOR</td><td class="rat">7.85</td><td>40</td><td>10.2</td><td>4.3</td><td>1.7</td></tr>
-<tr><td class="rk">65</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Brittney Sykes</td><td class="l tm">TOR</td><td class="rat">7.11</td><td>17</td><td>18.6</td><td>3.5</td><td>3.4</td></tr>
-<tr><td class="rk">66</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Nyara Sabally</td><td class="l tm">TOR</td><td class="rat">7.09</td><td>24</td><td>12.3</td><td>5.2</td><td>1.7</td></tr>
-<tr><td class="rk">72</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiki Rice</td><td class="l tm">TOR</td><td class="rat">6.89</td><td>24</td><td>12.5</td><td>3.5</td><td>3.2</td></tr>
-<tr><td class="rk">73</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Isabelle Harrison</td><td class="l tm">TOR</td><td class="rat">6.80</td><td>28</td><td>12.4</td><td>6.5</td><td>1.7</td></tr>
-<tr><td class="rk">75</td><td class="fl"><img src="https://flagcdn.com/w40/be.png" alt="" loading="lazy"></td><td class="l pl">Julie Allemand</td><td class="l tm">TOR</td><td class="rat">6.71</td><td>29</td><td>6.3</td><td>3.1</td><td>5.6</td></tr>
-<tr><td class="rk">90</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aneesah Morrow</td><td class="l tm">TOR</td><td class="rat">5.76</td><td>27</td><td>11.0</td><td>8.3</td><td>1.4</td></tr>
-<tr><td class="rk">91</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">María Conde</td><td class="l tm">TOR</td><td class="rat">5.64</td><td>33</td><td>8.9</td><td>4.6</td><td>2.6</td></tr>
-<tr><td class="rk">121</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Kia Nurse</td><td class="l tm">TOR</td><td class="rat">3.33</td><td>39</td><td>5.4</td><td>1.2</td><td>1.0</td></tr>
-<tr><td class="rk">138</td><td class="fl"><img src="https://flagcdn.com/w40/gb.png" alt="" loading="lazy"></td><td class="l pl">Temi Fagbenle</td><td class="l tm">TOR</td><td class="rat">2.56</td><td>23</td><td>5.5</td><td>3.3</td><td>1.0</td></tr>
-<tr><td class="rk">159</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Teonni Key</td><td class="l tm">TOR</td><td class="rat">1.42</td><td>35</td><td>2.0</td><td>1.8</td><td>0.5</td></tr>
-<tr><td class="rk">163</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiana Williams</td><td class="l tm">TOR</td><td class="rat">1.26</td><td>24</td><td>4.1</td><td>0.4</td><td>1.2</td></tr>
-<tr><td class="rk">174</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Tima Pouye</td><td class="l tm">TOR</td><td class="rat">0.74</td><td>19</td><td>3.2</td><td>0.8</td><td>1.2</td></tr>
-<tr><td class="rk">181</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Ornella Bankole</td><td class="l tm">TOR</td><td class="rat">0.65</td><td>10</td><td>3.5</td><td>2.0</td><td>0.9</td></tr>
-<tr><td class="rk">200</td><td class="fl"><img src="https://flagcdn.com/w40/ba.png" alt="" loading="lazy"></td><td class="l pl">Nikolina Milic</td><td class="l tm">TOR</td><td class="rat">0.28</td><td>7</td><td>3.0</td><td>1.3</td><td>0.4</td></tr>
-<tr><td class="rk">206</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Kayla Alexander</td><td class="l tm">TOR</td><td class="rat">0.18</td><td>4</td><td>2.2</td><td>2.8</td><td>0.5</td></tr>
-<tr><td class="rk">219</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Zaay Green</td><td class="l tm">TOR</td><td class="rat">0.04</td><td>3</td><td>2.3</td><td>0.7</td><td>0.3</td></tr>
-<tr><td class="rk">220</td><td class="fl"><img src="https://flagcdn.com/w40/gr.png" alt="" loading="lazy"></td><td class="l pl">Mariella Fasoula</td><td class="l tm">TOR</td><td class="rat">0.04</td><td>3</td><td>1.3</td><td>1.0</td><td>0.3</td></tr></tbody></table>
-<h4>Washington Mystics</h4><table data-rank="keep"><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl"><col class="c-tm"><col class="c-rat"><col class="c-gp"><col class="c-num"><col class="c-num"><col class="c-num"></colgroup><thead><tr>
-<th></th><th></th>
-<th class="l" data-s="t">Player</th><th class="l" data-s="t"></th>
-<th data-s="n">Rat</th><th data-s="n">GP</th><th data-s="n">Pts</th>
-<th data-s="n">Reb</th><th data-s="n">Ast</th>
-</tr></thead><tbody><tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Shakira Austin</td><td class="l tm">WAS</td><td class="rat">17.23</td><td>39</td><td>16.8</td><td>9.4</td><td>2.5</td></tr>
-<tr><td class="rk">18</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sonia Citron</td><td class="l tm">WAS</td><td class="rat">16.63</td><td>37</td><td>16.8</td><td>3.7</td><td>4.3</td></tr>
-<tr><td class="rk">23</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kiki Iriafen</td><td class="l tm">WAS</td><td class="rat">15.00</td><td>37</td><td>15.3</td><td>9.5</td><td>1.6</td></tr>
-<tr><td class="rk">52</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lauren Betts</td><td class="l tm">WAS</td><td class="rat">8.38</td><td>40</td><td>6.3</td><td>4.4</td><td>1.1</td></tr>
-<tr><td class="rk">67</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Michaela Onyenwere</td><td class="l tm">WAS</td><td class="rat">7.08</td><td>36</td><td>8.9</td><td>2.7</td><td>1.7</td></tr>
-<tr><td class="rk">93</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cotie McMahon</td><td class="l tm">WAS</td><td class="rat">5.36</td><td>38</td><td>6.3</td><td>2.9</td><td>1.9</td></tr>
-<tr><td class="rk">100</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Georgia Amoore</td><td class="l tm">WAS</td><td class="rat">4.82</td><td>40</td><td>6.6</td><td>1.4</td><td>3.5</td></tr>
-<tr><td class="rk">130</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Betnijah Laney-Hamilton</td><td class="l tm">WAS</td><td class="rat">2.79</td><td>26</td><td>4.7</td><td>1.9</td><td>2.0</td></tr>
-<tr><td class="rk">142</td><td class="fl"><img src="https://flagcdn.com/w40/rs.png" alt="" loading="lazy"></td><td class="l pl">Angela Dugalic</td><td class="l tm">WAS</td><td class="rat">2.20</td><td>34</td><td>2.9</td><td>2.4</td><td>0.6</td></tr>
-<tr><td class="rk">148</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Alicia Florez</td><td class="l tm">WAS</td><td class="rat">1.93</td><td>31</td><td>3.3</td><td>1.5</td><td>2.0</td></tr>
-<tr><td class="rk">169</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Lucy Olsen</td><td class="l tm">WAS</td><td class="rat">0.96</td><td>19</td><td>2.7</td><td>0.6</td><td>0.9</td></tr>
-<tr><td class="rk">193</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Cassandre Prosper</td><td class="l tm">WAS</td><td class="rat">0.37</td><td>35</td><td>2.1</td><td>1.1</td><td>0.5</td></tr>
-<tr><td class="rk">210</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Ally Wilson</td><td class="l tm">WAS</td><td class="rat">0.14</td><td>4</td><td>3.0</td><td>1.8</td><td>0.8</td></tr>
-<tr><td class="rk">212</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Rori Harmon</td><td class="l tm">WAS</td><td class="rat">0.11</td><td>12</td><td>1.0</td><td>0.7</td><td>0.9</td></tr>
-<tr><td class="rk">229</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Darianna Littlepage-Buggs</td><td class="l tm">WAS</td><td class="rat">-0.03</td><td>3</td><td>0.0</td><td>0.0</td><td>0.0</td></tr></tbody></table></section>
+<h2>Global Rating</h2>
+<p class="pick"><select id="pick"><option value="allworld">All-World · outside the NBA</option>
+<option value="euroleague">Euroleague</option>
+<option value="eurocup">Eurocup</option>
+<option value="spanish-acb">Spain</option>
+<option value="turkish-bsl">Turkey</option>
+<option value="greek-heba-a1">Greece</option>
+<option value="italian-lega-basket-serie-a">Italy</option>
+<option value="german-bbl">Germany</option>
+<option value="french-jeep-elite">France</option>
+<option value="lithuanian-lkl">Lithuania</option>
+<option value="australian-nbl">Australia</option></select></p>
+<section id="allworld" class="on"><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Competitions</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Jonas Valanciunas</td><td class="age">34-123</td><td class="l tm" title="NBA: 69; EuroBasket: 2; European World Cup Qualifier: 2">NBA, EuroBasket +1</td><td class="rat">4.11</td><td>73</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/bg.png" alt="" loading="lazy"></td><td class="l pl">Sasha Vezenkov</td><td class="age">31-031</td><td class="l tm" title="Euroleague: 39; Greece: 26">Euroleague, Greece</td><td class="rat">3.74</td><td>65</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/do.png" alt="" loading="lazy"></td><td class="l pl">Jean Montero</td><td class="age">23-065</td><td class="l tm" title="Euroleague: 38; Spain: 35; Americas World Cup Qualifier: 6">Euroleague, Spain +1</td><td class="rat">3.62</td><td>79</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Tyrese Martin</td><td class="age">27-183</td><td class="l tm" title="NBA: 46; G League: 3">NBA, G League</td><td class="rat">3.45</td><td>49</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Guerschon Yabusele</td><td class="age">30-263</td><td class="l tm" title="NBA: 67; European World Cup Qualifier: 2; EuroBasket: 1">NBA, European World Cup Qualifier +1</td><td class="rat">3.44</td><td>70</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/pr.png" alt="" loading="lazy"></td><td class="l pl">Ethan Thompson</td><td class="age">27-125</td><td class="l tm" title="NBA: 32; G League: 8; Americas World Cup Qualifier: 4">NBA, G League +1</td><td class="rat">3.15</td><td>44</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Timothe Luwawu</td><td class="age">31-120</td><td class="l tm" title="Euroleague: 36; Spain: 35; European World Cup Qualifier: 4; EuroBasket: 1">Euroleague, Spain +2</td><td class="rat">3.10</td><td>76</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Mike James</td><td class="age">36-019</td><td class="l tm" title="Euroleague: 39; France: 17; Americas World Cup Qualifier: 4">Euroleague, France +1</td><td class="rat">3.02</td><td>60</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Elijah Bryant</td><td class="age">31-140</td><td class="l tm" title="Euroleague: 38; Israel: 6">Euroleague, Israel</td><td class="rat">2.97</td><td>44</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Sylvain Francisco</td><td class="age">28-331</td><td class="l tm" title="Euroleague: 42; Lithuania: 30; European World Cup Qualifier: 5; EuroBasket: 1">Euroleague, Lithuania +2</td><td class="rat">2.94</td><td>78</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cole Anthony</td><td class="age">26-114</td><td class="l tm" title="NBA: 35">NBA</td><td class="rat">2.94</td><td>35</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/ge.png" alt="" loading="lazy"></td><td class="l pl">Tornike Shengelia</td><td class="age">34-336</td><td class="l tm" title="Spain: 40; Euroleague: 34; European World Cup Qualifier: 8; EuroBasket: 2">Spain, Euroleague +2</td><td class="rat">2.91</td><td>84</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kevin Punter</td><td class="age">33-073</td><td class="l tm" title="Spain: 42; Euroleague: 39">Spain, Euroleague</td><td class="rat">2.85</td><td>81</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Wade Baldwin</td><td class="age">30-161</td><td class="l tm" title="Euroleague: 42; Turkey: 30">Euroleague, Turkey</td><td class="rat">2.81</td><td>72</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Nadir Hifi</td><td class="age">24-052</td><td class="l tm" title="France: 39; Euroleague: 37; European World Cup Qualifier: 1">France, Euroleague +1</td><td class="rat">2.80</td><td>77</td></tr>
+<tr><td class="rk">16</td><td class="fl"><img src="https://flagcdn.com/w40/rs.png" alt="" loading="lazy"></td><td class="l pl">Nikola Milutinov</td><td class="age">31-250</td><td class="l tm" title="Euroleague: 40; Greece: 24; European World Cup Qualifier: 2; EuroBasket: 1">Euroleague, Greece +2</td><td class="rat">2.75</td><td>67</td></tr>
+<tr><td class="rk">17</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kendrick Nunn</td><td class="age">31-034</td><td class="l tm" title="Euroleague: 37; Greece: 21">Euroleague, Greece</td><td class="rat">2.75</td><td>58</td></tr>
+<tr><td class="rk">18</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aaron Holiday</td><td class="age">29-341</td><td class="l tm" title="NBA: 63">NBA</td><td class="rat">2.72</td><td>63</td></tr>
+<tr><td class="rk">19</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Mfiondu Kabengele</td><td class="age">29-023</td><td class="l tm" title="Euroleague: 36; Adriatic: 30; Americas World Cup Qualifier: 4">Euroleague, Adriatic +1</td><td class="rat">2.72</td><td>70</td></tr>
+<tr><td class="rk">20</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Daniel Oturu</td><td class="age">26-351</td><td class="l tm" title="Euroleague: 42; Israel: 8">Euroleague, Israel</td><td class="rat">2.71</td><td>50</td></tr>
+<tr><td class="rk">21</td><td class="fl"><img src="https://flagcdn.com/w40/ar.png" alt="" loading="lazy"></td><td class="l pl">Facundo Campazzo</td><td class="age">35-167</td><td class="l tm" title="Euroleague: 44; Spain: 31; Americas World Cup Qualifier: 7">Euroleague, Spain +1</td><td class="rat">2.71</td><td>82</td></tr>
+<tr><td class="rk">22</td><td class="fl"><img src="https://flagcdn.com/w40/cv.png" alt="" loading="lazy"></td><td class="l pl">Edy Tavares</td><td class="age">34-168</td><td class="l tm" title="Euroleague: 39; Spain: 21">Euroleague, Spain</td><td class="rat">2.70</td><td>60</td></tr>
+<tr><td class="rk">23</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Elie Okobo</td><td class="age">28-318</td><td class="l tm" title="Euroleague: 42; France: 37; European World Cup Qualifier: 3; EuroBasket: 1">Euroleague, France +2</td><td class="rat">2.69</td><td>83</td></tr>
+<tr><td class="rk">24</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Talen Horton-Tucker</td><td class="age">25-285</td><td class="l tm" title="Euroleague: 41; Turkey: 31">Euroleague, Turkey</td><td class="rat">2.68</td><td>72</td></tr>
+<tr><td class="rk">25</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Bryce Cotton</td><td class="age">34-026</td><td class="l tm" title="Australia: 40; Asian World Cup Qualifier: 2">Australia, Asian World Cup Qualifier</td><td class="rat">2.67</td><td>42</td></tr>
+<tr><td class="rk">26</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kameron Taylor</td><td class="age">31-326</td><td class="l tm" title="Euroleague: 40; Spain: 34">Euroleague, Spain</td><td class="rat">2.66</td><td>74</td></tr>
+<tr><td class="rk">27</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sharife Cooper</td><td class="age">25-087</td><td class="l tm" title="NBA: 41; G League: 8">NBA, G League</td><td class="rat">2.65</td><td>49</td></tr>
+<tr><td class="rk">28</td><td class="fl"><img src="https://flagcdn.com/w40/gr.png" alt="" loading="lazy"></td><td class="l pl">Tyler Dorsey</td><td class="age">30-200</td><td class="l tm" title="Euroleague: 43; Greece: 24; EuroBasket: 4; European World Cup Qualifier: 2">Euroleague, Greece +2</td><td class="rat">2.64</td><td>73</td></tr>
+<tr><td class="rk">29</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Will Clyburn</td><td class="age">36-112</td><td class="l tm" title="Euroleague: 33; Spain: 31">Euroleague, Spain</td><td class="rat">2.61</td><td>64</td></tr>
+<tr><td class="rk">30</td><td class="fl"><img src="https://flagcdn.com/w40/ge.png" alt="" loading="lazy"></td><td class="l pl">Marcquise Reed</td><td class="age">31-138</td><td class="l tm" title="Turkey: 32; European World Cup Qualifier: 6">Turkey, European World Cup Qualifier</td><td class="rat">2.57</td><td>38</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
+<section id="euroleague" class=""><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Jonas Valanciunas</td><td class="age">34-123</td><td class="l tm" title="NBA: 69; EuroBasket: 2; European World Cup Qualifier: 2">Zalgiris Kaunas</td><td class="rat">4.11</td><td>73</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/bg.png" alt="" loading="lazy"></td><td class="l pl">Sasha Vezenkov</td><td class="age">31-031</td><td class="l tm" title="Euroleague: 39; Greece: 26">Olympiacos</td><td class="rat">3.74</td><td>65</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/do.png" alt="" loading="lazy"></td><td class="l pl">Jean Montero</td><td class="age">23-065</td><td class="l tm" title="Euroleague: 38; Spain: 35; Americas World Cup Qualifier: 6">Olympiacos</td><td class="rat">3.62</td><td>79</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Tyrese Martin</td><td class="age">27-183</td><td class="l tm" title="NBA: 46; G League: 3">Barcelona</td><td class="rat">3.45</td><td>49</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Guerschon Yabusele</td><td class="age">30-263</td><td class="l tm" title="NBA: 67; European World Cup Qualifier: 2; EuroBasket: 1">Panathinaikos</td><td class="rat">3.44</td><td>70</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/pr.png" alt="" loading="lazy"></td><td class="l pl">Ethan Thompson</td><td class="age">27-125</td><td class="l tm" title="NBA: 32; G League: 8; Americas World Cup Qualifier: 4">Partizan</td><td class="rat">3.15</td><td>44</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Timothe Luwawu</td><td class="age">31-120</td><td class="l tm" title="Euroleague: 36; Spain: 35; European World Cup Qualifier: 4; EuroBasket: 1">Real Madrid</td><td class="rat">3.10</td><td>76</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Mike James</td><td class="age">36-019</td><td class="l tm" title="Euroleague: 39; France: 17; Americas World Cup Qualifier: 4">Anadolu Efes</td><td class="rat">3.02</td><td>60</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Elijah Bryant</td><td class="age">31-140</td><td class="l tm" title="Euroleague: 38; Israel: 6">Hapoel Tel Aviv</td><td class="rat">2.97</td><td>44</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Sylvain Francisco</td><td class="age">28-331</td><td class="l tm" title="Euroleague: 42; Lithuania: 30; European World Cup Qualifier: 5; EuroBasket: 1">Panathinaikos</td><td class="rat">2.94</td><td>78</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/ge.png" alt="" loading="lazy"></td><td class="l pl">Tornike Shengelia</td><td class="age">34-336</td><td class="l tm" title="Spain: 40; Euroleague: 34; European World Cup Qualifier: 8; EuroBasket: 2">Dubai</td><td class="rat">2.91</td><td>84</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kevin Punter</td><td class="age">33-073</td><td class="l tm" title="Spain: 42; Euroleague: 39">Barcelona</td><td class="rat">2.85</td><td>81</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Wade Baldwin</td><td class="age">30-161</td><td class="l tm" title="Euroleague: 42; Turkey: 30">Fenerbahce</td><td class="rat">2.81</td><td>72</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Nadir Hifi</td><td class="age">24-052</td><td class="l tm" title="France: 39; Euroleague: 37; European World Cup Qualifier: 1">Paris</td><td class="rat">2.80</td><td>77</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/rs.png" alt="" loading="lazy"></td><td class="l pl">Nikola Milutinov</td><td class="age">31-250</td><td class="l tm" title="Euroleague: 40; Greece: 24; European World Cup Qualifier: 2; EuroBasket: 1">Olympiacos</td><td class="rat">2.75</td><td>67</td></tr>
+<tr><td class="rk">16</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kendrick Nunn</td><td class="age">31-034</td><td class="l tm" title="Euroleague: 37; Greece: 21">Panathinaikos</td><td class="rat">2.75</td><td>58</td></tr>
+<tr><td class="rk">17</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Mfiondu Kabengele</td><td class="age">29-023</td><td class="l tm" title="Euroleague: 36; Adriatic: 30; Americas World Cup Qualifier: 4">Dubai</td><td class="rat">2.72</td><td>70</td></tr>
+<tr><td class="rk">18</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Daniel Oturu</td><td class="age">26-351</td><td class="l tm" title="Euroleague: 42; Israel: 8">Hapoel Tel Aviv</td><td class="rat">2.71</td><td>50</td></tr>
+<tr><td class="rk">19</td><td class="fl"><img src="https://flagcdn.com/w40/ar.png" alt="" loading="lazy"></td><td class="l pl">Facundo Campazzo</td><td class="age">35-167</td><td class="l tm" title="Euroleague: 44; Spain: 31; Americas World Cup Qualifier: 7">Real Madrid</td><td class="rat">2.71</td><td>82</td></tr>
+<tr><td class="rk">20</td><td class="fl"><img src="https://flagcdn.com/w40/cv.png" alt="" loading="lazy"></td><td class="l pl">Edy Tavares</td><td class="age">34-168</td><td class="l tm" title="Euroleague: 39; Spain: 21">Real Madrid</td><td class="rat">2.70</td><td>60</td></tr>
+<tr><td class="rk">21</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Elie Okobo</td><td class="age">28-318</td><td class="l tm" title="Euroleague: 42; France: 37; European World Cup Qualifier: 3; EuroBasket: 1">Dubai</td><td class="rat">2.69</td><td>83</td></tr>
+<tr><td class="rk">22</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Talen Horton-Tucker</td><td class="age">25-285</td><td class="l tm" title="Euroleague: 41; Turkey: 31">Fenerbahce</td><td class="rat">2.68</td><td>72</td></tr>
+<tr><td class="rk">23</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kameron Taylor</td><td class="age">31-326</td><td class="l tm" title="Euroleague: 40; Spain: 34">Valencia</td><td class="rat">2.66</td><td>74</td></tr>
+<tr><td class="rk">24</td><td class="fl"><img src="https://flagcdn.com/w40/gr.png" alt="" loading="lazy"></td><td class="l pl">Tyler Dorsey</td><td class="age">30-200</td><td class="l tm" title="Euroleague: 43; Greece: 24; EuroBasket: 4; European World Cup Qualifier: 2">Olympiacos</td><td class="rat">2.64</td><td>73</td></tr>
+<tr><td class="rk">25</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Will Clyburn</td><td class="age">36-112</td><td class="l tm" title="Euroleague: 33; Spain: 31">Fenerbahce</td><td class="rat">2.61</td><td>64</td></tr>
+<tr><td class="rk">26</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Trent Forrest</td><td class="age">28-086</td><td class="l tm" title="Euroleague: 27; Spain: 26">Virtus Bologna</td><td class="rat">2.54</td><td>53</td></tr>
+<tr><td class="rk">27</td><td class="fl"><img src="https://flagcdn.com/w40/mk.png" alt="" loading="lazy"></td><td class="l pl">Moses Wright</td><td class="age">27-257</td><td class="l tm" title="Euroleague: 42; Lithuania: 34">Olimpia Milano</td><td class="rat">2.50</td><td>76</td></tr>
+<tr><td class="rk">28</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Andreas Obst</td><td class="age">30-055</td><td class="l tm" title="Germany: 36; Euroleague: 35; EuroBasket: 4">Bayern Munich</td><td class="rat">2.50</td><td>75</td></tr>
+<tr><td class="rk">29</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Cedi Osman</td><td class="age">31-151</td><td class="l tm" title="Euroleague: 39; Greece: 19; European World Cup Qualifier: 6; EuroBasket: 4">Anadolu Efes</td><td class="rat">2.48</td><td>68</td></tr>
+<tr><td class="rk">30</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Armoni Brooks</td><td class="age">28-093</td><td class="l tm" title="Italy: 39; Euroleague: 38">Valencia</td><td class="rat">2.48</td><td>77</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
+<section id="eurocup" class=""><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aaron Holiday</td><td class="age">29-341</td><td class="l tm" title="NBA: 63">Maxima Roma</td><td class="rat">2.72</td><td>63</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/ge.png" alt="" loading="lazy"></td><td class="l pl">Marcquise Reed</td><td class="age">31-138</td><td class="l tm" title="Turkey: 32; European World Cup Qualifier: 6">Bahcesehir</td><td class="rat">2.57</td><td>38</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">EJ Liddell</td><td class="age">25-262</td><td class="l tm" title="NBA: 26; G League: 24">PAOK</td><td class="rat">2.40</td><td>50</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Malachi Flynn</td><td class="age">28-120</td><td class="l tm" title="Turkey: 33; Eurocup: 21; European World Cup Qualifier: 3">Bahcesehir</td><td class="rat">2.18</td><td>57</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jeremiah Robinson-Earl</td><td class="age">25-307</td><td class="l tm" title="G League: 29; NBA: 22; Americas World Cup Qualifier: 2">Aris</td><td class="rat">2.14</td><td>53</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Marcelinho Huertas</td><td class="age">43-104</td><td class="l tm" title="Spain: 35; Champions League: 13">Tenerife</td><td class="rat">2.13</td><td>48</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Matt Morgan</td><td class="age">28-303</td><td class="l tm" title="Euroleague: 34; Italy: 30">Aris</td><td class="rat">2.01</td><td>64</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/ge.png" alt="" loading="lazy"></td><td class="l pl">Giorgi Shermadini</td><td class="age">37-157</td><td class="l tm" title="Spain: 30; Champions League: 16; EuroBasket: 2; European World Cup Qualifier: 2">Tenerife</td><td class="rat">1.99</td><td>50</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jared Harper</td><td class="age">28-357</td><td class="l tm" title="Israel: 27; Eurocup: 19">Hapoel Jerusalem</td><td class="rat">1.96</td><td>46</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/hr.png" alt="" loading="lazy"></td><td class="l pl">Miro Bilan</td><td class="age">37-047</td><td class="l tm" title="Italy: 37">Maxima Roma</td><td class="rat">1.92</td><td>37</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Glynn Watson</td><td class="age">29-181</td><td class="l tm" title="Euroleague: 30; France: 28">Venezia</td><td class="rat">1.88</td><td>58</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/lv.png" alt="" loading="lazy"></td><td class="l pl">Rihards Lomazs</td><td class="age">30-146</td><td class="l tm" title="Lithuania: 41; Eurocup: 16; European World Cup Qualifier: 8; EuroBasket: 1">Neptunas</td><td class="rat">1.78</td><td>66</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/mk.png" alt="" loading="lazy"></td><td class="l pl">Ethan Happ</td><td class="age">30-122</td><td class="l tm" title="Spain: 25">Tenerife</td><td class="rat">1.77</td><td>25</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Devante Jones</td><td class="age">28-150</td><td class="l tm" title="Italy: 26; Eurocup: 18">London Lions</td><td class="rat">1.76</td><td>44</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/mk.png" alt="" loading="lazy"></td><td class="l pl">Nenad Dimitrijevic</td><td class="age">28-195</td><td class="l tm" title="Germany: 28; Euroleague: 16">Aris</td><td class="rat">1.71</td><td>44</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
+<section id="spanish-acb" class=""><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Tyrese Martin</td><td class="age">27-183</td><td class="l tm" title="NBA: 46; G League: 3">Barcelona</td><td class="rat">3.45</td><td>49</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Timothe Luwawu</td><td class="age">31-120</td><td class="l tm" title="Euroleague: 36; Spain: 35; European World Cup Qualifier: 4; EuroBasket: 1">Real Madrid</td><td class="rat">3.10</td><td>76</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kevin Punter</td><td class="age">33-073</td><td class="l tm" title="Spain: 42; Euroleague: 39">Barcelona</td><td class="rat">2.85</td><td>81</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/ar.png" alt="" loading="lazy"></td><td class="l pl">Facundo Campazzo</td><td class="age">35-167</td><td class="l tm" title="Euroleague: 44; Spain: 31; Americas World Cup Qualifier: 7">Real Madrid</td><td class="rat">2.71</td><td>82</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/cv.png" alt="" loading="lazy"></td><td class="l pl">Edy Tavares</td><td class="age">34-168</td><td class="l tm" title="Euroleague: 39; Spain: 21">Real Madrid</td><td class="rat">2.70</td><td>60</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kameron Taylor</td><td class="age">31-326</td><td class="l tm" title="Euroleague: 40; Spain: 34">Valencia</td><td class="rat">2.66</td><td>74</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Armoni Brooks</td><td class="age">28-093</td><td class="l tm" title="Italy: 39; Euroleague: 38">Valencia</td><td class="rat">2.48</td><td>77</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Ricky Rubio</td><td class="age">35-320</td><td class="l tm" title="Spain: 37; Champions League: 14">Joventut</td><td class="rat">2.37</td><td>51</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/es.png" alt="" loading="lazy"></td><td class="l pl">Jaime Pradilla</td><td class="age">25-246</td><td class="l tm" title="Euroleague: 44; Spain: 40; European World Cup Qualifier: 4">Real Madrid</td><td class="rat">2.27</td><td>88</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/hu.png" alt="" loading="lazy"></td><td class="l pl">Nate Reuvers</td><td class="age">27-341</td><td class="l tm" title="Euroleague: 44; Spain: 37; European World Cup Qualifier: 4">Valencia</td><td class="rat">2.19</td><td>85</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Mac McClung</td><td class="age">27-243</td><td class="l tm" title="G League: 29; NBA: 11">Girona</td><td class="rat">2.16</td><td>40</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Marcelinho Huertas</td><td class="age">43-104</td><td class="l tm" title="Spain: 35; Champions League: 13">Tenerife</td><td class="rat">2.13</td><td>48</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cameron Hunt</td><td class="age">29-012</td><td class="l tm" title="Spain: 39; Champions League: 15">Unicaja</td><td class="rat">2.13</td><td>54</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Theo Maledon</td><td class="age">25-086</td><td class="l tm" title="Euroleague: 38; Spain: 31; EuroBasket: 1">Real Madrid</td><td class="rat">2.10</td><td>70</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Josh Nebo</td><td class="age">29-051</td><td class="l tm" title="Italy: 34; Euroleague: 26">Barcelona</td><td class="rat">2.05</td><td>60</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
+<section id="turkish-bsl" class=""><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Mike James</td><td class="age">36-019</td><td class="l tm" title="Euroleague: 39; France: 17; Americas World Cup Qualifier: 4">Anadolu Efes</td><td class="rat">3.02</td><td>60</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Wade Baldwin</td><td class="age">30-161</td><td class="l tm" title="Euroleague: 42; Turkey: 30">Fenerbahce</td><td class="rat">2.81</td><td>72</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Talen Horton-Tucker</td><td class="age">25-285</td><td class="l tm" title="Euroleague: 41; Turkey: 31">Fenerbahce</td><td class="rat">2.68</td><td>72</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Will Clyburn</td><td class="age">36-112</td><td class="l tm" title="Euroleague: 33; Spain: 31">Fenerbahce</td><td class="rat">2.61</td><td>64</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/ge.png" alt="" loading="lazy"></td><td class="l pl">Marcquise Reed</td><td class="age">31-138</td><td class="l tm" title="Turkey: 32; European World Cup Qualifier: 6">Bahcesehir</td><td class="rat">2.57</td><td>38</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Cedi Osman</td><td class="age">31-151</td><td class="l tm" title="Euroleague: 39; Greece: 19; European World Cup Qualifier: 6; EuroBasket: 4">Anadolu Efes</td><td class="rat">2.48</td><td>68</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/dk.png" alt="" loading="lazy"></td><td class="l pl">Shavon Shields</td><td class="age">32-093</td><td class="l tm" title="Euroleague: 35; Italy: 32">Fenerbahce</td><td class="rat">2.28</td><td>67</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Matthew Strazel</td><td class="age">24-032</td><td class="l tm" title="Euroleague: 43; France: 40; European World Cup Qualifier: 5">Anadolu Efes</td><td class="rat">2.26</td><td>88</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Malachi Flynn</td><td class="age">28-120</td><td class="l tm" title="Turkey: 33; Eurocup: 21; European World Cup Qualifier: 3">Bahcesehir</td><td class="rat">2.18</td><td>57</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">David DeJulius</td><td class="age">27-028</td><td class="l tm" title="Spain: 36; FIBA Europe Cup: 13">Besiktas</td><td class="rat">2.10</td><td>49</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/pl.png" alt="" loading="lazy"></td><td class="l pl">Jordan Loyd</td><td class="age">33-041</td><td class="l tm" title="Euroleague: 34; Turkey: 31; European World Cup Qualifier: 4; EuroBasket: 2">Anadolu Efes</td><td class="rat">2.09</td><td>71</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Shane Larkin</td><td class="age">33-339</td><td class="l tm" title="Turkey: 13; Euroleague: 12; EuroBasket: 4">Fenerbahce</td><td class="rat">1.99</td><td>29</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/hr.png" alt="" loading="lazy"></td><td class="l pl">Ante Zizic</td><td class="age">29-245</td><td class="l tm" title="Turkey: 29; Eurocup: 22">Besiktas</td><td class="rat">1.91</td><td>51</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/tr.png" alt="" loading="lazy"></td><td class="l pl">Erxhan Osmani</td><td class="age">28-033</td><td class="l tm" title="Euroleague: 36; Turkey: 34; European World Cup Qualifier: 5; EuroBasket: 4">Anadolu Efes</td><td class="rat">1.84</td><td>79</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/ro.png" alt="" loading="lazy"></td><td class="l pl">Fatts Russell</td><td class="age">28-123</td><td class="l tm" title="Adriatic: 23; Eurocup: 19; Romania: 10; European World Cup Qualifier: 6">Anadolu Efes</td><td class="rat">1.78</td><td>58</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
+<section id="greek-heba-a1" class=""><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/bg.png" alt="" loading="lazy"></td><td class="l pl">Sasha Vezenkov</td><td class="age">31-031</td><td class="l tm" title="Euroleague: 39; Greece: 26">Olympiacos</td><td class="rat">3.74</td><td>65</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/do.png" alt="" loading="lazy"></td><td class="l pl">Jean Montero</td><td class="age">23-065</td><td class="l tm" title="Euroleague: 38; Spain: 35; Americas World Cup Qualifier: 6">Olympiacos</td><td class="rat">3.62</td><td>79</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Guerschon Yabusele</td><td class="age">30-263</td><td class="l tm" title="NBA: 67; European World Cup Qualifier: 2; EuroBasket: 1">Panathinaikos</td><td class="rat">3.44</td><td>70</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Sylvain Francisco</td><td class="age">28-331</td><td class="l tm" title="Euroleague: 42; Lithuania: 30; European World Cup Qualifier: 5; EuroBasket: 1">Panathinaikos</td><td class="rat">2.94</td><td>78</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/rs.png" alt="" loading="lazy"></td><td class="l pl">Nikola Milutinov</td><td class="age">31-250</td><td class="l tm" title="Euroleague: 40; Greece: 24; European World Cup Qualifier: 2; EuroBasket: 1">Olympiacos</td><td class="rat">2.75</td><td>67</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kendrick Nunn</td><td class="age">31-034</td><td class="l tm" title="Euroleague: 37; Greece: 21">Panathinaikos</td><td class="rat">2.75</td><td>58</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/gr.png" alt="" loading="lazy"></td><td class="l pl">Tyler Dorsey</td><td class="age">30-200</td><td class="l tm" title="Euroleague: 43; Greece: 24; EuroBasket: 4; European World Cup Qualifier: 2">Olympiacos</td><td class="rat">2.64</td><td>73</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">EJ Liddell</td><td class="age">25-262</td><td class="l tm" title="NBA: 26; G League: 24">PAOK</td><td class="rat">2.40</td><td>50</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/bg.png" alt="" loading="lazy"></td><td class="l pl">Codi Miller-McIntyre</td><td class="age">32-097</td><td class="l tm" title="Euroleague: 39; Adriatic: 20">Olympiacos</td><td class="rat">2.30</td><td>59</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Isaac Bonga</td><td class="age">26-302</td><td class="l tm" title="Euroleague: 38; Adriatic: 29; EuroBasket: 4; European World Cup Qualifier: 3">Panathinaikos</td><td class="rat">2.24</td><td>74</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/sn.png" alt="" loading="lazy"></td><td class="l pl">Brancou Badio</td><td class="age">27-201</td><td class="l tm" title="Spain: 41; Euroleague: 40; African World Cup Qualifier: 8">Panathinaikos</td><td class="rat">2.21</td><td>89</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/az.png" alt="" loading="lazy"></td><td class="l pl">Donta Hall</td><td class="age">29-030</td><td class="l tm" title="Euroleague: 38; Greece: 27">Olympiacos</td><td class="rat">2.19</td><td>65</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jeremiah Robinson-Earl</td><td class="age">25-307</td><td class="l tm" title="G League: 29; NBA: 22; Americas World Cup Qualifier: 2">Aris</td><td class="rat">2.14</td><td>53</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/gr.png" alt="" loading="lazy"></td><td class="l pl">Kostas Sloukas</td><td class="age">36-234</td><td class="l tm" title="Euroleague: 38; Greece: 19; EuroBasket: 4">Panathinaikos</td><td class="rat">2.06</td><td>61</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Matt Morgan</td><td class="age">28-303</td><td class="l tm" title="Euroleague: 34; Italy: 30">Aris</td><td class="rat">2.01</td><td>64</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
+<section id="italian-lega-basket-serie-a" class=""><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Aaron Holiday</td><td class="age">29-341</td><td class="l tm" title="NBA: 63">Maxima Roma</td><td class="rat">2.72</td><td>63</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Trent Forrest</td><td class="age">28-086</td><td class="l tm" title="Euroleague: 27; Spain: 26">Virtus Bologna</td><td class="rat">2.54</td><td>53</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/it.png" alt="" loading="lazy"></td><td class="l pl">Darius Thompson</td><td class="age">31-125</td><td class="l tm" title="Euroleague: 44; Spain: 28; European World Cup Qualifier: 2; EuroBasket: 1">Olimpia Milano</td><td class="rat">2.00</td><td>75</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/ca.png" alt="" loading="lazy"></td><td class="l pl">Marcus Carr</td><td class="age">27-092</td><td class="l tm" title="Germany: 37; Champions League: 14; Americas World Cup Qualifier: 6">Virtus Bologna</td><td class="rat">1.97</td><td>57</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">RJ Cole</td><td class="age">27-013</td><td class="l tm" title="Italy: 40; Eurocup: 18">Olimpia Milano</td><td class="rat">1.94</td><td>58</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/hr.png" alt="" loading="lazy"></td><td class="l pl">Miro Bilan</td><td class="age">37-047</td><td class="l tm" title="Italy: 37">Maxima Roma</td><td class="rat">1.92</td><td>37</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/it.png" alt="" loading="lazy"></td><td class="l pl">Amedeo Della Valle</td><td class="age">33-148</td><td class="l tm" title="Italy: 35; European World Cup Qualifier: 4">Varese</td><td class="rat">1.91</td><td>39</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Alec Peters</td><td class="age">31-146</td><td class="l tm" title="Euroleague: 43; Greece: 32">Olimpia Milano</td><td class="rat">1.90</td><td>75</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Glynn Watson</td><td class="age">29-181</td><td class="l tm" title="Euroleague: 30; France: 28">Venezia</td><td class="rat">1.88</td><td>58</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Derrick Alston Jr</td><td class="age">28-354</td><td class="l tm" title="Euroleague: 37; Italy: 28">Virtus Bologna</td><td class="rat">1.83</td><td>65</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/ar.png" alt="" loading="lazy"></td><td class="l pl">Leandro Bolmaro</td><td class="age">25-360</td><td class="l tm" title="Italy: 31; Euroleague: 29; Americas World Cup Qualifier: 4">Olimpia Milano</td><td class="rat">1.83</td><td>64</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jason Burnell</td><td class="age">29-022</td><td class="l tm" title="Italy: 36">Olimpia Milano</td><td class="rat">1.78</td><td>36</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/it.png" alt="" loading="lazy"></td><td class="l pl">Momo Diouf</td><td class="age">24-361</td><td class="l tm" title="Italy: 37; Euroleague: 33; EuroBasket: 1; European World Cup Qualifier: 1">Virtus Bologna</td><td class="rat">1.73</td><td>72</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jordan Parks</td><td class="age">32-143</td><td class="l tm" title="Italy: 38; Eurocup: 16">Venezia</td><td class="rat">1.70</td><td>54</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Garrison Mathews</td><td class="age">29-317</td><td class="l tm" title="NBA: 15">Olimpia Milano</td><td class="rat">1.70</td><td>15</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
+<section id="german-bbl" class=""><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Andreas Obst</td><td class="age">30-055</td><td class="l tm" title="Germany: 36; Euroleague: 35; EuroBasket: 4">Bayern Munich</td><td class="rat">2.50</td><td>75</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">MarJon Beauchamp</td><td class="age">25-329</td><td class="l tm" title="G League: 19; NBA: 14; Americas World Cup Qualifier: 2">Bayern Munich</td><td class="rat">2.22</td><td>35</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Duane Washington Jr</td><td class="age">26-166</td><td class="l tm" title="Euroleague: 23; Adriatic: 21">Bayern Munich</td><td class="rat">2.01</td><td>44</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Justinian Jessup</td><td class="age">28-106</td><td class="l tm" title="Germany: 43; Euroleague: 37">Bayern Munich</td><td class="rat">1.76</td><td>80</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Oscar da Silva</td><td class="age">27-350</td><td class="l tm" title="Germany: 43; Euroleague: 35; EuroBasket: 4; European World Cup Qualifier: 4">Bayern Munich</td><td class="rat">1.76</td><td>86</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/rs.png" alt="" loading="lazy"></td><td class="l pl">Vladimir Lucic</td><td class="age">37-081</td><td class="l tm" title="Euroleague: 33; Germany: 29">Bayern Munich</td><td class="rat">1.60</td><td>62</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Ibi Watson</td><td class="age">28-243</td><td class="l tm" title="Germany: 41">Ulm</td><td class="rat">1.56</td><td>41</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Justin Bean</td><td class="age">29-293</td><td class="l tm" title="Germany: 49; Champions League: 13">ALBA Berlin</td><td class="rat">1.48</td><td>62</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cobe Williams</td><td class="age">26-055</td><td class="l tm" title="Germany: 42">Chemnitz</td><td class="rat">1.38</td><td>42</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Joe Wieskamp</td><td class="age">27-014</td><td class="l tm" title="Germany: 33">ALBA Berlin</td><td class="rat">1.38</td><td>33</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Corey Davis</td><td class="age">29-094</td><td class="l tm" title="Germany: 34; Eurocup: 18">Chemnitz</td><td class="rat">1.38</td><td>52</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Grayson Murphy</td><td class="age">27-214</td><td class="l tm" title="Germany: 40">Bonn</td><td class="rat">1.35</td><td>40</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Jack Kayil</td><td class="age">20-222</td><td class="l tm" title="Germany: 47; Champions League: 14; European World Cup Qualifier: 4">ALBA Berlin</td><td class="rat">1.34</td><td>65</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jordan Roland</td><td class="age">29-234</td><td class="l tm" title="Germany: 39">Trier</td><td class="rat">1.33</td><td>39</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Spencer Reaves</td><td class="age">30-257</td><td class="l tm" title="Germany: 33">Mitteldeutscher</td><td class="rat">1.32</td><td>33</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
+<section id="french-jeep-elite" class=""><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Nadir Hifi</td><td class="age">24-052</td><td class="l tm" title="France: 39; Euroleague: 37; European World Cup Qualifier: 1">Paris</td><td class="rat">2.80</td><td>77</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Tyson Etienne</td><td class="age">26-354</td><td class="l tm" title="G League: 28; NBA: 24">Paris</td><td class="rat">2.12</td><td>52</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Alize Johnson</td><td class="age">30-137</td><td class="l tm" title="China: 24; G League: 19">Paris</td><td class="rat">1.59</td><td>43</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/ss.png" alt="" loading="lazy"></td><td class="l pl">Both Gach</td><td class="age">27-214</td><td class="l tm" title="France: 33; Eurocup: 24; African World Cup Qualifier: 6">ASVEL</td><td class="rat">1.52</td><td>63</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/cm.png" alt="" loading="lazy"></td><td class="l pl">Jeremiah Hill</td><td class="age">31-002</td><td class="l tm" title="France: 31; Champions League: 14; African World Cup Qualifier: 9">Chalon</td><td class="rat">1.49</td><td>54</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jaelen House</td><td class="age">25-127</td><td class="l tm" title="G League: 22; China: 18">Bourg</td><td class="rat">1.46</td><td>40</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Patty Mills</td><td class="age">38-026</td><td class="l tm" title="Spain: 17; Champions League: 6">ASVEL</td><td class="rat">1.45</td><td>23</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Shaquille Harrison</td><td class="age">32-335</td><td class="l tm" title="Euroleague: 29; France: 27">Trabozonspor</td><td class="rat">1.44</td><td>56</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">TyTy Washington</td><td class="age">24-295</td><td class="l tm" title="NBA: 16; G League: 14">ASVEL</td><td class="rat">1.41</td><td>30</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Mathis Dossou Yovo</td><td class="age">25-304</td><td class="l tm" title="France: 20; European World Cup Qualifier: 1">ASVEL</td><td class="rat">1.31</td><td>21</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Jared Rhoden</td><td class="age">27-010</td><td class="l tm" title="France: 29; Euroleague: 26">Paris</td><td class="rat">1.30</td><td>55</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Tyson Walker</td><td class="age">25-353</td><td class="l tm" title="Australia: 34">Bourg</td><td class="rat">1.24</td><td>34</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/cl.png" alt="" loading="lazy"></td><td class="l pl">Sebastian Herrera</td><td class="age">28-309</td><td class="l tm" title="France: 37; Euroleague: 36; Americas World Cup Qualifier: 4">Paris</td><td class="rat">1.22</td><td>77</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/fr.png" alt="" loading="lazy"></td><td class="l pl">Hugo Robineau</td><td class="age">26-191</td><td class="l tm" title="France: 20">Bourg</td><td class="rat">1.16</td><td>20</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Michael Weathers</td><td class="age">29-032</td><td class="l tm" title="Germany: 26; Champions League: 6">Nancy</td><td class="rat">1.15</td><td>32</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
+<section id="lithuanian-lkl" class=""><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Jonas Valanciunas</td><td class="age">34-123</td><td class="l tm" title="NBA: 69; EuroBasket: 2; European World Cup Qualifier: 2">Zalgiris Kaunas</td><td class="rat">4.11</td><td>73</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Azuolas Tubelis</td><td class="age">24-168</td><td class="l tm" title="Euroleague: 42; Lithuania: 32; European World Cup Qualifier: 6; EuroBasket: 2">Zalgiris Kaunas</td><td class="rat">2.46</td><td>82</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Carsen Edwards</td><td class="age">28-178</td><td class="l tm" title="Euroleague: 36; Italy: 34">Zalgiris Kaunas</td><td class="rat">2.28</td><td>70</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Sterling Brown</td><td class="age">31-208</td><td class="l tm" title="Euroleague: 37; Adriatic: 31">Zalgiris Kaunas</td><td class="rat">1.86</td><td>68</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/lv.png" alt="" loading="lazy"></td><td class="l pl">Rihards Lomazs</td><td class="age">30-146</td><td class="l tm" title="Lithuania: 41; Eurocup: 16; European World Cup Qualifier: 8; EuroBasket: 1">Neptunas</td><td class="rat">1.78</td><td>66</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Nigel Williams-Goss</td><td class="age">31-355</td><td class="l tm" title="Euroleague: 31; Lithuania: 23">Zalgiris Kaunas</td><td class="rat">1.76</td><td>54</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Marek Blazevic</td><td class="age">25-005</td><td class="l tm" title="Turkey: 28; Champions League: 14; European World Cup Qualifier: 8; EuroBasket: 2">Zalgiris Kaunas</td><td class="rat">1.59</td><td>52</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Dustin Sleva</td><td class="age">30-348</td><td class="l tm" title="Euroleague: 42; Lithuania: 39">Zalgiris Kaunas</td><td class="rat">1.49</td><td>81</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/de.png" alt="" loading="lazy"></td><td class="l pl">Maodo Lo</td><td class="age">33-249</td><td class="l tm" title="Euroleague: 41; Lithuania: 29; EuroBasket: 4; European World Cup Qualifier: 2">Zalgiris Kaunas</td><td class="rat">1.46</td><td>76</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Saben Lee</td><td class="age">27-075</td><td class="l tm" title="Euroleague: 27; Turkey: 10; Greece: 10">Zalgiris Kaunas</td><td class="rat">1.45</td><td>47</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/nl.png" alt="" loading="lazy"></td><td class="l pl">Yannick Franke</td><td class="age">30-108</td><td class="l tm" title="Turkey: 29; FIBA Europe Cup: 14; European World Cup Qualifier: 6">Neptunas</td><td class="rat">1.35</td><td>49</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Edgaras Ulanovas</td><td class="age">34-242</td><td class="l tm" title="Euroleague: 42; Lithuania: 39">Zalgiris Kaunas</td><td class="rat">1.34</td><td>81</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Arturas Gudaitis</td><td class="age">33-079</td><td class="l tm" title="Lithuania: 28; Champions League: 16; European World Cup Qualifier: 2">Rytas</td><td class="rat">1.29</td><td>46</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Donatas Tarolis</td><td class="age">32-160</td><td class="l tm" title="Lithuania: 36; Eurocup: 15; European World Cup Qualifier: 2">Neptunas</td><td class="rat">1.27</td><td>53</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Gytis Radzevicius</td><td class="age">31-051</td><td class="l tm" title="Spain: 27; Euroleague: 25; Lithuania: 9; European World Cup Qualifier: 6; Champions League: 5; EuroBasket: 2">Rytas</td><td class="rat">1.27</td><td>74</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
+<section id="australian-nbl" class=""><table><colgroup><col class="c-rk"><col class="c-fl"><col class="c-pl">
+<col class="c-age"><col class="c-cp"><col class="c-rat"><col class="c-gp"></colgroup>
+<thead><tr><th></th><th></th><th class="l" data-s="t">Player</th>
+<th class="l" data-s="t">Age</th>
+<th class="l" data-s="t">Team</th>
+<th data-s="n">Rat</th><th data-s="n">GP</th></tr></thead><tbody><tr><td class="rk">1</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Cole Anthony</td><td class="age">26-114</td><td class="l tm" title="NBA: 35">Melbourne United</td><td class="rat">2.94</td><td>35</td></tr>
+<tr><td class="rk">2</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Bryce Cotton</td><td class="age">34-026</td><td class="l tm" title="Australia: 40; Asian World Cup Qualifier: 2">Adelaide 36ers</td><td class="rat">2.67</td><td>42</td></tr>
+<tr><td class="rk">3</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kendric Davis</td><td class="age">27-115</td><td class="l tm" title="Australia: 40; Puerto Rico: 8">Sydney Kings</td><td class="rat">2.44</td><td>48</td></tr>
+<tr><td class="rk">4</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Nathan Sobey</td><td class="age">36-054</td><td class="l tm" title="Australia: 36; Puerto Rico: 19">SE Melbourne Phoenix</td><td class="rat">1.97</td><td>55</td></tr>
+<tr><td class="rk">5</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Parker Jackson-Cartwright</td><td class="age">31-056</td><td class="l tm" title="Australia: 33; China: 18">New Zealand Breakers</td><td class="rat">1.83</td><td>51</td></tr>
+<tr><td class="rk">6</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Kristian Doolittle</td><td class="age">28-322</td><td class="l tm" title="Australia: 37; Puerto Rico: 27">Perth Wildcats</td><td class="rat">1.76</td><td>64</td></tr>
+<tr><td class="rk">7</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Jack McVeigh</td><td class="age">30-071</td><td class="l tm" title="Australia: 29; Puerto Rico: 16; Asian World Cup Qualifier: 2">Cairns Taipans</td><td class="rat">1.70</td><td>47</td></tr>
+<tr><td class="rk">8</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Xavier Cooks</td><td class="age">31-018</td><td class="l tm" title="Australia: 36; Puerto Rico: 13">Sydney Kings</td><td class="rat">1.64</td><td>49</td></tr>
+<tr><td class="rk">9</td><td class="fl"><img src="https://flagcdn.com/w40/lt.png" alt="" loading="lazy"></td><td class="l pl">Arnas Velicka</td><td class="age">26-270</td><td class="l tm" title="Lithuania: 41; Eurocup: 17; European World Cup Qualifier: 4; EuroBasket: 2">Brisbane Bullets</td><td class="rat">1.62</td><td>64</td></tr>
+<tr><td class="rk">10</td><td class="fl"><img src="https://flagcdn.com/w40/us.png" alt="" loading="lazy"></td><td class="l pl">Zylan Cheatham</td><td class="age">30-293</td><td class="l tm" title="Australia: 41">Adelaide 36ers</td><td class="rat">1.60</td><td>41</td></tr>
+<tr><td class="rk">11</td><td class="fl"><img src="https://flagcdn.com/w40/ss.png" alt="" loading="lazy"></td><td class="l pl">Jo Acuil</td><td class="age">32-133</td><td class="l tm" title="Australia: 37">Perth Wildats</td><td class="rat">1.52</td><td>37</td></tr>
+<tr><td class="rk">12</td><td class="fl"><img src="https://flagcdn.com/w40/nz.png" alt="" loading="lazy"></td><td class="l pl">Tyrell Harrison</td><td class="age">27-062</td><td class="l tm" title="Australia: 25; Puerto Rico: 21; Asian World Cup Qualifier: 3">Brisbane Bullets</td><td class="rat">1.51</td><td>49</td></tr>
+<tr><td class="rk">13</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Josh Bannan</td><td class="age">25-192</td><td class="l tm" title="Australia: 34; Italy: 13; Asian World Cup Qualifier: 6; Champions League: 1">Tasmania JackJumpers</td><td class="rat">1.50</td><td>54</td></tr>
+<tr><td class="rk">14</td><td class="fl"><img src="https://flagcdn.com/w40/au.png" alt="" loading="lazy"></td><td class="l pl">Isaac Humphries</td><td class="age">28-244</td><td class="l tm" title="Australia: 41">Adelaide 36ers</td><td class="rat">1.49</td><td>41</td></tr>
+<tr><td class="rk">15</td><td class="fl"><img src="https://flagcdn.com/w40/br.png" alt="" loading="lazy"></td><td class="l pl">Timothy Soares</td><td class="age">29-214</td><td class="l tm" title="Australia: 40; Puerto Rico: 28; Americas World Cup Qualifier: 4">Sydney Kings</td><td class="rat">1.43</td><td>72</td></tr></tbody></table><p class="key">* club for next season not yet confirmed</p></section>
 </div>
 <script>
 (function(){
-  // SORTING AND THE TOGGLE, PER TABLE, so one section's state does not follow the
-  // reader into another.
+  var sel = document.getElementById("pick");
+  var secs = [].slice.call(document.querySelectorAll("section"));
+  if(sel){
+    sel.addEventListener("change", function(){
+      secs.forEach(function(s){
+        s.className = (s.id === sel.value) ? "on" : "";
+      });
+    });
+  }
+  // Sorting, per table, so one view's order does not follow the reader into
+  // another. Rows are reordered in place; nothing is fetched and no table
+  // changes height.
   [].slice.call(document.querySelectorAll("table")).forEach(function(tbl){
     var tb = tbl.querySelector("tbody");
     if(!tb) return;
     var all = [].slice.call(tb.querySelectorAll("tr"));
     var key = -1, desc = true;
-
     var ths = [].slice.call(tbl.querySelectorAll("thead th"));
     ths.forEach(function(th, i){
       if(!th.getAttribute("data-s")) return;
       th.addEventListener("click", function(){
-        // The same column again reverses; a new one starts descending, which is
-        // what a reader wants from a rating and from every per-game figure here.
         if(key === i) desc = !desc; else { key = i; desc = true; }
         var numeric = th.getAttribute("data-s") === "n";
         all.sort(function(a, b){
@@ -507,23 +365,13 @@ th[aria-sort="ascending"]::after{content:" ↑"}
         });
         ths.forEach(function(o){ o.removeAttribute("aria-sort"); });
         th.setAttribute("aria-sort", desc ? "descending" : "ascending");
-        draw();
+        tb.innerHTML = "";
+        all.forEach(function(r, n){
+          r.cells[0].textContent = n + 1;
+          tb.appendChild(r);
+        });
       });
     });
-
-    function draw(){
-      var show = all;
-      tb.innerHTML = "";
-      var keep = tbl.getAttribute("data-rank") === "keep";
-      show.forEach(function(r, n){
-        // Renumbered so a sorted list reads 1..N -- EXCEPT where the number is a
-        // league position rather than a row count, which a team table carries and
-        // must not lose the moment someone sorts it.
-        if(!keep) r.cells[0].textContent = n + 1;
-        r.className = "";
-        tb.appendChild(r);
-      });
-    }
   });
 })();
 </script>
